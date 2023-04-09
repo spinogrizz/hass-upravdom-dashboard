@@ -1,0 +1,51 @@
+# Колонка с выключателями света
+- type: vertical-stack
+  view_layout:
+    grid-area: light
+
+  cards:
+    - type: custom:button-card
+      entity: light.1st_hallway_light
+      template: light
+      styles:
+        icon:
+          - width: 55%
+
+    - type: custom:button-card
+      entity: light.all_lights_kitchen
+      template: light
+      icon: mdi:countertop-outline
+
+    - type: custom:button-card
+      entity: light.1st_kitchen_table_light
+      template: light
+      icon: mdi:table-furniture
+
+    - type: custom:button-card
+      entity: light.1st_living_room_2_light
+      template: light
+      icon: mdi:sofa-outline
+
+    - type: custom:button-card
+      entity: light.1st_living_room_1_light
+      template: light
+      icon: mdi:fridge-outline
+
+    - type: custom:button-card
+      entity: light.1st_bathroom_light
+      icon: mdi:toilet
+      template: light
+      triggers_update: binary_sensor.motion_xiaomi_retro_bathroom_occupancy
+      
+      styles:
+        card:
+          - background: >
+              [[[
+                  let occupancy = states['binary_sensor.motion_xiaomi_retro_bathroom_occupancy']
+                  return (entity.state == 'on' && occupancy && occupancy.state == 'on') ? 'radial-gradient(#77000099, #33000099)' : '#00000099'
+              ]]]
+
+    - type: custom:button-card
+      entity: light.all_lights_living_room
+      template: light
+      icon: mdi:power

@@ -1,0 +1,24 @@
+base:
+  styles:
+    card:
+      - border-radius: 16px
+      - background-color: '#00000099'
+      - border-width: 0
+      - -webkit-backdrop-filter: blur(10px)
+    name:
+      - opacity: 0.8
+
+fill_width:
+  styles:
+    card:
+      - width: 100% 
+
+fill_height:
+  styles:
+    card:
+    - height: calc( 100% + 5px )      
+
+fill:
+  template:
+    - fill_width
+    - fill_height

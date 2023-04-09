@@ -1,0 +1,67 @@
+- type: custom:button-card
+  entity: input_datetime.dog_fed_last_time
+
+  view_layout:
+    grid-area: dog
+
+  template: 
+    - base
+    - fill_height
+
+  show_entity_picture: true
+  show_state: false
+  show_label: true
+  show_name: false
+
+  entity_picture: |
+    [[[
+      return "/local/tablet/icons/"
+             + ((variables.fed_time > variables.interval) ? "dog_hungry.png" : "dog_fed.png")
+    ]]]
+
+  triggers_update: 
+    - binary_sensor.motion_living_room_sensor_occupancy
+
+  variables:
+    # show 'dog is hungry' state when feed time exceeds 7 hours
+    interval: 25200 
+
+    # calculate feed time by substracting input_datetime from "now" timestamp
+    fed_time: |
+      [[[
+        let fed = new Date(entity.state).getTime()/1000
+        let now = new Date().getTime()/1000
+        return now - fed
+      ]]]
+
+  label: |
+    [[[
+      let h = parseInt((variables.fed_time / 3600) % 24)
+
+      if ( h <= 1 ) {
+        return "Ура!"
+      } else if ( h <= 4 ) {
+        return h + " <span style='font-size: 16pt'>часа</span>"
+      } else { 
+        return h + " <span style='font-size: 16pt'>часов</span>"
+      }
+    ]]]
+
+  styles:
+    card:
+      - background: |
+          [[[
+            return (variables.fed_time > variables.interval) 
+                    ? "radial-gradient(#77000099, #33000099)" 
+                    : "radial-gradient(#00440099, #00220099)" 
+          ]]]
+    icon: 
+      - width: 65%
+      - position: relative
+      - left: 1%
+      - top: 2%
+
+    label:
+      - font-size: 23pt
+      - position: relative
+      - top: -22%

@@ -1,0 +1,58 @@
+
+- type: custom:button-card
+  template:
+    - base
+    - fill_height
+
+  view_layout:
+    grid-area: cctv
+
+  # grab user and password for reolink cameras from secrets.yaml
+  variables:
+    camera_user: !secret reolink_camera_user
+    camera_password: !secret reolink_camera_password
+
+  # use entity picture as a camera feed view
+  show_entity_picture: true
+
+  # dummy template time_trigger sensors allows to refresh entity_picture every second
+  # don't forget to remove them from recorder to prevent database bloat
+  triggers_update: 
+    - sensor.every_1s
+    - input_text.last_camera_detected_motion
+
+  # automation is used to store last camera name that triggered motion 
+  # to the input_text variable, that we transform to IP address of the camera
+  entity_picture: >
+      [[[
+        let camera_name = states['input_text.last_camera_detected_motion'].state
+
+        let camera_ips = {
+          'door':     '10.42.100.10',
+          'veranda':  '10.42.100.11',
+          'front':    '10.42.100.12',
+          'backyard': '10.42.100.13',
+          'garden':   '10.42.100.14',
+          'terrace':  '10.42.100.15'
+        }
+
+        let camera_ip = camera_ips[camera_name] || '10.42.100.10'
+
+        return "http://"
+               + camera_ip
+               + "/cgi-bin/api.cgi?cmd=Snap&channel=0"
+               + "&user=" + variables.camera_user
+               + "&password=" + variables.camera_password
+               + "&width=640&height=480"
+               + "&time=" + Date.now()
+      ]]]
+  
+  styles:
+    card:
+      - padding: 0px
+      - margin: 0px
+
+    entity_picture:
+      - width: auto
+      - height: 110%
+

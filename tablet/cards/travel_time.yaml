@@ -1,0 +1,59 @@
+- type: custom:button-card
+  entity: sensor.travel_time_kindergarden
+  triggers_update:
+    - sensor.every_1m
+    - sensor.travel_time_kindergarden
+
+  view_layout:
+    grid-area: route
+
+  template: 
+    - base
+    - fill_height
+
+  state:
+    - id: green
+      operator: '<'
+      value: 30
+      entity_picture: '/local/tablet/icons/traffic_green.png'
+
+    - id: yellow
+      operator: '<'
+      value: 49
+      entity_picture: '/local/tablet/icons/traffic_yellow.png'
+
+    - id: red
+      operator: '<'
+      value: 999
+      entity_picture: '/local/tablet/icons/traffic_red.png'
+
+  styles:
+    icon:
+      - width: 45%
+    label:
+      - font-size: 23pt
+      - position: relative
+      - top: -25%
+
+  show_label: true
+  show_name: false
+  show_entity_picture: true
+
+  label: >
+    [[[
+      let arrival = new Date(Date.now() + entity.state * 60_000)
+      
+      let hr = arrival.getHours()
+      let min = arrival.getMinutes()
+      let weekday = (new Date).getDay()
+
+      if ( hr >= 6 && hr <= 10 && weekday != 0 && weekday != 6 ) {
+        if (min < 10) {
+          min = "0" + min
+        }
+
+        return hr + ":" + min
+      } else {
+        return parseInt(entity.state) + " <span style='font-size: 16pt'>мин</span>"
+      }
+    ]]]  

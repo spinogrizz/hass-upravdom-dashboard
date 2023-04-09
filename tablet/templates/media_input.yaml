@@ -1,0 +1,29 @@
+media_input:
+  template:
+    - base
+    - fill_height
+
+  variables:
+    media_player: 
+
+  styles:
+    icon:
+      - width: 50%
+
+    card:
+      - background-color: >
+          [[[
+            return states['media_player.marantz_nr1508'].attributes.source == variables.input ? '#25426FBB' : '#00000099'
+          ]]]
+
+  show_icon: true
+
+  tap_action:
+    action: call-service
+    service: script.switch_receiver_input
+    service_data: 
+      input: >
+        [[[
+          return variables.input
+        ]]]
+

@@ -1,0 +1,174 @@
+# Телевизор
+- type: custom:button-card
+  entity: media_player.samsung_frame
+  template: 
+    - media_device
+
+  tap_action:
+    action: call-service
+    service: script.toggle_samsung_frame
+
+  variables: 
+    mode: >
+      [[[
+        let source = entity.attributes.source 
+        let art_mode = (entity.attributes.art_mode_status == 'on')
+
+        if ( art_mode ) {
+          return "art"
+        } else if ( source == 'Game Console' ) {
+          return "games"
+        } else if ( source == 'YouTube' ) {
+          return "youtube"
+        } else {
+          return "off"
+        }
+      ]]]
+
+  view_layout:
+    grid-area: tv
+
+  label: >
+    [[[
+      switch ( variables.mode ) {
+        case 'games':     return 'Games'
+        case 'youtube':   return 'YouTube'
+        default:          return ''
+      }
+    ]]]
+
+  styles:
+    card:
+      - background-image: >
+          [[[
+            return "url('/local/tablet/bg_tv_" + variables.mode + ".png')"
+          ]]]
+
+
+# Ресивер
+- type: custom:button-card
+  entity: media_player.marantz_nr1508
+  template: 
+    - media_device
+
+  view_layout:
+    grid-area: av
+
+  state:
+    - value: 'on'
+      styles:
+        card:
+          - background-image: url("/local/tablet/bg_receiver_on.png")        
+
+    - value: 'off'
+      styles:
+        card:
+          - background-image: url("/local/tablet/bg_receiver_off.png")        
+
+  label: >
+    [[[
+      return entity.attributes.source
+    ]]]
+
+# Контролы ресивера
+- type: horizontal-stack
+  view_layout:
+    grid-area: avcon
+
+  cards:
+    - type: horizontal-stack
+      cards:
+        - type: custom:button-card
+          template: media_input
+          icon: mdi:youtube
+          variables:
+            input: YouTube
+
+        - type: custom:button-card
+          template: media_input
+          icon: mdi:gamepad-variant
+          variables:
+            input: Games
+
+        - type: custom:button-card
+          template: media_input
+          icon: mdi:apple
+          variables:
+            input: Apple TV                     
+
+        - type: custom:button-card
+          template: media_input
+          icon: mdi:album
+          variables:
+            input: Vinyl
+
+# Громкость ресивера
+- type: custom:button-card
+  template:
+    - base
+    - fill_height
+
+  icon: mdi:volume-high
+  show_icon: true
+
+  view_layout:
+    grid-area: volume
+
+  custom_fields:
+    slider:
+      card:
+        type: custom:slider-button-card
+        entity: media_player.marantz_nr1508
+        show_name: false
+        show_state: false
+        compact: true
+
+        slider: 
+          direction: left-right
+          background: solid 
+
+        action_button:
+          show: false
+
+        tap_action:
+          action: none
+
+        icon: 
+          show: false
+
+        style: |
+          :host {
+              --ha-card-background: linear-gradient(to right, #1D081E, #0A171F) !important;
+          }
+
+          ha-card {
+            border: none;
+          }
+
+          .slider-bg {
+            --slider-bg-color: #3F3D67 !important;
+          }
+
+  styles:
+    icon: 
+      - color: white
+      - opacity: >
+          [[[
+            return states['media_player.marantz_nr1508'].state == 'on' ? '1.0' : '0.8'
+          ]]]
+      - position: absolute
+      - top: 3%x
+      - left: 6%
+      - z-index: 15
+      - width: 10%
+      - pointer-events: none
+      - user-select: none
+
+    custom_fields:
+      slider:
+        - position: absolute
+        - top: -0px
+        - left: -100%
+        - width: 350%
+        - height: 100%
+        - border: none

@@ -1,0 +1,15 @@
+- type: custom:button-card
+  template: 
+    - base
+    - fill_height
+
+  view_layout:
+    grid-area: none1
+
+- type: custom:button-card
+  template: 
+    - base
+    - fill_height
+
+  view_layout:
+    grid-area: none2

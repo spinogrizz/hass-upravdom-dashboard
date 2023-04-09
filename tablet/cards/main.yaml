@@ -1,0 +1,102 @@
+
+- type: custom:button-card
+  template: 
+    - base
+    - fill_height
+
+  view_layout:
+    grid-area: main
+
+  show_state: true
+  show_icon: false
+
+  custom_fields:
+    temp_1st: >
+        [[[ 
+          let is_ac_on = false
+          let is_heat_on = false
+          let is_floor_on = (states['switch.pump_floor_heating_1st'].state == 'on')
+          let temp = states['sensor.sonoff_living_room_temperature_temperature'].state 
+
+          var style = is_ac_on ? 'cold' : is_heat_on ? 'hot' : is_floor_on ? 'floor' : 'none'
+
+          return "<span class='" + style + "'>" + (Math.round(temp) || '--') + "°</span>"
+        ]]]
+
+    temp_2nd: >
+        [[[ 
+          let is_ac_on = false
+          let is_heat_on = states['climate.thermostat_2nd_cabinet'].state == 'heat'
+                        || states['climate.thermostat_2nd_guest_room'].state == 'heat'
+                        || states['climate.thermostat_2nd_room1'].state == 'heat'
+          let is_floor_on = true
+          let temp = states['sensor.temperature_2nd_average'].state
+
+          var style = is_ac_on ? 'cold' : is_heat_on ? 'hot' : is_floor_on ? 'floor' : 'none'
+
+          return "<span class='" + style + "'>" + (Math.round(temp) || '--') + "°</span>"
+        ]]]
+
+    temp_3rd: >
+        [[[ 
+          let is_ac_on = false
+          let is_heat_on = false
+          let is_floor_on = (states['switch.pump_floor_heating_3rd'].state == 'on')
+          let temp = states['sensor.temperature_bedroom'].state
+
+          var style = is_ac_on ? 'cold' : is_heat_on ? 'hot' : is_floor_on ? 'floor' : 'none'
+
+          return "<span class='" + style + "'>" + (Math.round(temp) || '--') + "°</span>"
+        ]]]
+  
+  styles:
+    card: 
+      - background-image: url('/local/tablet/home_card_bg.png')
+      - background-size: cover
+      - background-color: '#00000099'
+
+    custom_fields:
+      temp_1st:
+        - position: absolute
+        - top: 204px
+        - left: 75px
+
+      temp_2nd:
+        - position: absolute
+        - top: 132px
+        - left: 75px
+
+      temp_3rd:
+        - position: absolute
+        - top: 61px
+        - left: 75px
+
+
+  card_mod:
+    style: |
+      .cold, .hot, .floor, .none {
+        border-radius: 5px;
+        margin-right: -1px;
+        padding: 3px 10px 3px 12px;  
+      }
+
+      .cold { background-color: #4F8ABD; }
+      .hot { background-color: #BD4F4F; }
+
+      .floor:after {
+        content: ""; 
+        float: left; 
+        background: #BD4F4F; 
+        width: 100%; 
+        height: 5px; 
+        margin-top: 2px;
+        border-radius: 3px;
+        overflow: auto;
+      }
+
+      ha-card .ellipsis {
+        font-size: 22pt;
+        padding: 6px;
+        border-radius: 5px;
+      }
+

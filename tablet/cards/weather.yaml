@@ -1,0 +1,50 @@
+- type: custom:button-card
+  template: 
+    - base
+    - fill_height
+
+  view_layout:
+    grid-area: weather
+
+  styles:
+    grid:
+      - grid-template-areas: '"now later after"'
+      - grid-template-columns: 1fr 1fr 1fr
+      - grid-template-rows: 1fr
+    card:
+      - padding: 0px
+      - margin: 0px  
+
+  custom_fields:
+    now: 
+      card:
+        type: custom:button-card
+        template: weather
+        variables:  
+          forecast: 0
+        styles:
+          custom_fields:
+            weather_icon:
+              - left: 3px
+          label:
+            - left: 5px
+
+    later:
+      card:
+        type: custom:button-card
+        template: weather
+        variables:  
+          forecast: 2
+
+    after:
+      card:
+        type: custom:button-card
+        template: weather
+        variables:  
+          forecast: 4
+        styles:
+          custom_fields:
+            weather_icon:
+              - left: -1px
+          label:
+            - left: 2px                

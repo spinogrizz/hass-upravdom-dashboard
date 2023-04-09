@@ -1,0 +1,45 @@
+media_device:
+  template:
+  - base
+  - fill_height
+
+  show_icon: false
+  show_label: true
+  show_name: false
+
+  tap_action:
+    action: toggle
+  hold_action:
+    action: more-info
+
+  custom_fields:
+    power_button: >
+      <ha-icon icon="mdi:power" style="width: 37px; height: 37px;"/>
+
+  styles:
+    card:
+      - background-size: cover
+      - background-color: >
+          [[[
+            return entity.state == 'on' ? '#25426FBB' : '#00000099'
+          ]]]
+
+    label:
+      - position: absolute
+      - top: 9%
+      - left: 12%
+      - font-size: 16pt
+      - opacity: >
+          [[[
+            return entity.state == 'on' ? 1.0 : 0.0
+          ]]]
+
+    custom_fields:
+      power_button:
+        - position: absolute
+        - top: 9%
+        - left: 9%
+        - opacity: >
+            [[[
+              return entity.state == 'on' ? 0.0 : 0.8
+            ]]]

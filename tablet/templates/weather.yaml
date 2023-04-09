@@ -1,0 +1,79 @@
+weather:
+  entity: weather.openweathermap
+
+  custom_fields: 
+    weather_icon: >
+      [[[
+        let time = new Date(entity.attributes.forecast[variables.forecast].datetime)
+        let hours = time.getHours()
+        let condition = entity.attributes.forecast[variables.forecast].condition
+
+        switch (condition) {
+
+          case 'clear-night':      return "<span style='font-size: 23pt'>🌙</span>"
+          case 'cloudy':           return "<span style='position: relative; top: -5px'>☁️</span>"
+          case 'exceptional':      return "⭕️"
+          case 'fog':              return "🌫️"
+          case 'hail':             return "🌨️"
+          case 'lightning':        return "🌩️"
+          case 'lightning-rainy':  return "⛈️"
+          case 'partlycloudy':     return (hours < 8 || hours > 20) ? "☁️" : "⛅️"
+          case 'pouring':          return "☔"
+          case 'rainy':            return "🌧️"
+          case 'snowy':            return "<span style='font-size: 23pt'>❄️</span>"
+          case 'snowy-rainy':      return "🌨️"
+          case 'sunny':            return "☀️"
+          case 'windy':            return "🌬️"
+          case 'windy-variant':    return "🌬️"
+          default:                 return "☁️"
+        }
+      ]]]
+
+  show_icon: false
+  show_entity_picture: false
+  show_label: true
+  show_name: false
+
+  label: >
+    [[[
+      return parseInt(entity.attributes.forecast[variables.forecast].temperature) + '°'
+    ]]]
+
+  styles:
+    card:
+      - background: >
+          [[[
+            let time = new Date(entity.attributes.forecast[variables.forecast].datetime)
+            let hours = time.getHours()
+
+            if ( hours > 22 || hours < 7 ) {
+              return '#00001155'
+            } else if ( hours > 11 && hours < 17 ) {
+              return '#E5C04B09'
+            } else {
+              return 'none'
+            }
+          ]]]
+
+      - border: none
+      - border-radius: 0px
+      - width: 105px
+      - height: 172px
+
+    label:
+      - font-size: 22pt
+      - position: absolute
+      - bottom: 28px
+      - left: 4px
+      - width: 100%
+
+    custom_fields:
+      weather_icon:
+        - font-size: 40px
+        - position: absolute
+        - top: 35px
+        - left: 1px
+        - width: 100%
+        - filter: grayscale(40%)
+ 
+      
