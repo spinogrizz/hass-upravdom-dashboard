@@ -13,6 +13,7 @@
   show_label: true
   show_name: false
 
+  # show appropriate icon for a feeding state
   entity_picture: |
     [[[
       return "/local/tablet/icons/"
@@ -34,6 +35,8 @@
         return now - fed
       ]]]
 
+  # show "hooray" if fed in less than 4 hours
+  # display time since last feeding time otherwise
   label: |
     [[[
       let h = parseInt((variables.fed_time / 3600) % 24)
@@ -47,6 +50,7 @@
       }
     ]]]
 
+  # use green/red gradient background to show feed state
   styles:
     card:
       - background: |

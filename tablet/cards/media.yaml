@@ -1,4 +1,3 @@
-# Телевизор
 - type: custom:button-card
   entity: media_player.samsung_frame
   template: 
@@ -8,6 +7,8 @@
     action: call-service
     service: script.toggle_samsung_frame
 
+  # Detect current source/mode 
+  # art_mode=on means TV is off (Samsung Frame)
   variables: 
     mode: >
       [[[
@@ -28,6 +29,7 @@
   view_layout:
     grid-area: tv
 
+  # Display current state and input
   label: >
     [[[
       switch ( variables.mode ) {
@@ -37,6 +39,7 @@
       }
     ]]]
 
+  # Display different background for a card depending on a state
   styles:
     card:
       - background-image: >
@@ -45,7 +48,7 @@
           ]]]
 
 
-# Ресивер
+# AV Receiver
 - type: custom:button-card
   entity: media_player.marantz_nr1508
   template: 
@@ -54,6 +57,7 @@
   view_layout:
     grid-area: av
 
+  # Display different background depending on a on/off state
   state:
     - value: 'on'
       styles:
@@ -70,7 +74,7 @@
       return entity.attributes.source
     ]]]
 
-# Контролы ресивера
+# Buttons to switch scenes and modes of both TV and receiver
 - type: horizontal-stack
   view_layout:
     grid-area: avcon
@@ -102,7 +106,7 @@
           variables:
             input: Vinyl
 
-# Громкость ресивера
+# Receiver volume
 - type: custom:button-card
   template:
     - base
@@ -136,6 +140,7 @@
         icon: 
           show: false
 
+        # These hacks allows more accurate embedding of slider-card inside button-card
         style: |
           :host {
               --ha-card-background: linear-gradient(to right, #1D081E, #0A171F) !important;
@@ -164,6 +169,9 @@
       - pointer-events: none
       - user-select: none
 
+    # Make slider card larger than enclosing card, 
+    # so volume values will change between ~0.2–0.6 instead of default unreasonable 0.0-1.0 interval
+    # slider-button-card doesn't allow clamping to custom min/max values
     custom_fields:
       slider:
         - position: absolute

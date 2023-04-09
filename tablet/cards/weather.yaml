@@ -15,6 +15,10 @@
       - padding: 0px
       - margin: 0px  
 
+  # Weather cards shows three units — now, later, after
+  # now — current weather
+  # later — ~6 hours from now
+  # after — ~12 hours from now
   custom_fields:
     now: 
       card:

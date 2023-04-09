@@ -1,6 +1,8 @@
 weather:
   entity: weather.openweathermap
 
+  # use emojis to display weather state
+  # every emoji is a bit different, so use <span> to tweak their size and position slightly
   custom_fields: 
     weather_icon: >
       [[[
@@ -41,6 +43,9 @@ weather:
 
   styles:
     card:
+      # use dynamic background for each cell:
+      # darker color — at night
+      # lighter color — during the day
       - background: >
           [[[
             let time = new Date(entity.attributes.forecast[variables.forecast].datetime)

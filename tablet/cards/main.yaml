@@ -10,6 +10,7 @@
   show_state: true
   show_icon: false
 
+  # use custom fields to display state for each floor
   custom_fields:
     temp_1st: >
         [[[ 
@@ -72,6 +73,10 @@
         - left: 75px
 
 
+  # use different styles for a different states:
+  # red underline - infloor heating only
+  # red background — radiator heating active
+  # blue — air conditioning is on
   card_mod:
     style: |
       .cold, .hot, .floor, .none {

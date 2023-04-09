@@ -11,6 +11,7 @@
     - base
     - fill_height
 
+  # Show green/yellow/red traffic light depending on a travel time
   state:
     - id: green
       operator: '<'
@@ -30,6 +31,7 @@
   styles:
     icon:
       - width: 45%
+
     label:
       - font-size: 23pt
       - position: relative
@@ -39,6 +41,8 @@
   show_name: false
   show_entity_picture: true
 
+  # In the morning and only on weekdays show arrival time to destination,
+  # or show travel time otherwise
   label: >
     [[[
       let arrival = new Date(Date.now() + entity.state * 60_000)
