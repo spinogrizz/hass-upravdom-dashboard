@@ -1,7 +1,156 @@
 - type: custom:button-card
+  entity: vacuum.dreame_r2254_07f1_robot_cleaner
+
+  show_name: false
+  show_state: false
+  show_label: true
+  show_icon: false
+
   template: 
     - base
     - fill_height
 
   view_layout:
     grid-area: vacuum
+
+  tap_action:
+    action: call-service
+    service: >
+      [[[
+        return entity.state == 'docked' ? 'vacuum.start' : 'vacuum.return_to_base'
+      ]]]
+    service_data:
+      entity_id: entity
+
+
+  hold_action:
+    action: more-info
+
+  variables:
+    clean_time: >
+      [[[
+        let state = states['vacuum.dreame_r2254_07f1_robot_cleaner']
+        let cleanTime = parseInt(state.attributes['clean_logs.first_clean_time']) * 1000
+        
+        let original = new Date(cleanTime)
+        let date = new Date(cleanTime)
+        let now = new Date()
+
+        date.setHours(0); date.setMinutes(0); date.setSeconds(0)
+        now.setHours(0); now.setMinutes(0); now.setSeconds(0)
+
+        let days = parseInt((now-date) / (1000 * 60 * 60 * 24), 10)
+
+        if ( days == 0 ) {
+          let opts = { hour: '2-digit', minute:'2-digit', timeZone: 'Europe/Moscow' }        
+          return original.toLocaleString('ru', opts)
+        } else if ( days == 1 ) {
+          return "Вчера"
+        } else if ( days < 5 ) {
+          return days + " дня"
+        } else {
+          return days + " дней"
+        }
+      ]]]
+
+  custom_fields:
+    start_button: >
+      <ha-icon icon="mdi:play" style="width: 50px; height: 50px;"/>
+
+    home_button: >
+      <ha-icon icon="mdi:home-import-outline" style="width: 40px; height: 40px;"/>
+
+    charge_status: >
+      [[[
+        if ( states['sensor.dreame_r2254_07f1_charging_state'].state == 'charging' ) {
+          return "<ha-icon icon='mdi:lightning-bolt' style='width: 32px; height: 32px;'/>"
+        } else {
+          return "<ha-icon icon='" + entity.attributes.battery_icon + "' style='width: 25px; height: 25px;'/>"
+        }
+      ]]]
+
+    battery: >
+      [[[
+        return entity.attributes.battery_level + '%'
+      ]]]
+
+  label: >
+    [[[
+      let state = states['sensor.dreame_r2254_07f1_status'].state
+
+      switch ( state ) {
+        case 'drying':
+          return "Сушу"
+
+        case "sweeping":
+        case 'sweeping and mopping':
+          return "Работаю"
+
+        case 'washing':
+        case 'go washing':
+          return "Полощу"
+
+        case 'go charging':
+          return "Домой"
+        
+        default:
+          return variables.clean_time
+      }
+    ]]]
+
+
+  styles:
+    card:
+      - background-image: url("/local/tablet/vacuum_omni_on.png")
+      - background-size: cover
+      - background-color: >
+          [[[
+            return entity.state == 'docked' ? '#00000099' : '#25426FBB'
+          ]]]     
+
+    label: 
+      - font-size: 17pt
+      - position: absolute
+      - bottom: 10%
+      - left: 10%
+
+    custom_fields:
+      start_button:
+        - position: absolute
+        - top: 8%
+        - left: 6%
+        - visibility: >
+            [[[
+              return entity.state == 'docked' ? 'visible' : 'hidden'
+            ]]]
+        
+      home_button:
+        - position: absolute
+        - top: 10%
+        - left: 10%
+        - visibility: >
+            [[[
+              return entity.state != 'docked' ? 'visible' : 'hidden'
+            ]]]
+
+      charge_status:
+        - color: '#200F2D'
+        - position: absolute
+        - top: 37%        
+        - right: 13%
+        - opacity: 0.8
+
+      battery:
+        - font-size: 15pt
+        - color: '#200F2D'
+        - font-weight: medium
+        - position: absolute
+        - top: 57%        
+        - right: 10%        
+
+
+  state:
+    - value: 'docked'
+      styles:
+        card:
+          - background-image: url("/local/tablet/vacuum_omni_off.png")        

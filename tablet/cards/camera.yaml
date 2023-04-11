@@ -18,7 +18,7 @@
   # dummy template time_trigger sensors allows to refresh entity_picture every second
   # don't forget to remove them from recorder to prevent database bloat
   triggers_update: 
-    - sensor.every_1s
+    - sensor.every_2s
     - input_text.last_camera_detected_motion
 
   # automation is used to store last camera name that triggered motion 
