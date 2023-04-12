@@ -19,7 +19,7 @@ weather:
           case 'hail':             return "🌨️"
           case 'lightning':        return "🌩️"
           case 'lightning-rainy':  return "⛈️"
-          case 'partlycloudy':     return (hours < 8 || hours > 20) ? "☁️" : "⛅️"
+          case 'partlycloudy':     return (hours < 8 || hours > 20) ? "☁️" : "<span style='position: relative; top: -9px'>⛅️</span>"
           case 'pouring':          return "☔"
           case 'rainy':            return "🌧️"
           case 'snowy':            return "<span style='font-size: 23pt'>❄️</span>"
