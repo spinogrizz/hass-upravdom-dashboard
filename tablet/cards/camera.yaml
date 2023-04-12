@@ -7,6 +7,25 @@
   view_layout:
     grid-area: cctv
 
+  # tap to switch between cameras
+  tap_action:
+    action: call-service
+    service: input_text.set_value
+    service_data:
+      entity_id: input_text.last_camera_detected_motion
+      value: >
+        [[[
+          let cameras = [ 'door', 'veranda', 'terrace', 'backyard', 'garden', 'front' ]
+          let current = states['input_text.last_camera_detected_motion'].state
+          let idx = cameras.indexOf(current) + 1
+
+          if ( idx >= cameras.length ) {
+            idx = 0
+          }
+
+          return cameras[idx]
+        ]]]
+
   # grab user and password for reolink cameras from secrets.yaml
   variables:
     camera_user: !secret reolink_camera_user
