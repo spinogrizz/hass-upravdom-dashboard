@@ -71,7 +71,8 @@
 
     battery: >
       [[[
-        return entity.attributes.battery_level + '%'
+        let level = entity.attributes.battery_level
+        return level == 100 ? '' : (level + '%')
       ]]]
 
   label: >
@@ -98,10 +99,30 @@
       }
     ]]]
 
-
   styles:
     card:
-      - background-image: url("/local/tablet/vacuum_omni_on.png")
+      - background-image: >
+          [[[
+            let state = states['sensor.dreame_r2254_07f1_status'].state
+            let imageState = "off"
+
+            switch ( state ) {
+              case 'drying':
+              case 'washing':
+                imageState = "on"
+                break
+
+              case "sweeping":
+              case 'sweeping and mopping':
+              case 'go washing':
+              case 'go charging':
+                imageState = "away"
+                break
+            }
+
+            return "url('/local/tablet/vacuum_omni_" + imageState + ".png')"
+          ]]]
+        
       - background-size: cover
       - background-color: >
           [[[
@@ -149,8 +170,4 @@
         - right: 10%        
 
 
-  state:
-    - value: 'docked'
-      styles:
-        card:
-          - background-image: url("/local/tablet/vacuum_omni_off.png")        
+       
