@@ -29,17 +29,16 @@
   variables:
     clean_time: >
       [[[
-        let state = states['vacuum.dreame_r2254_07f1_robot_cleaner']
-        let cleanTime = parseInt(state.attributes['clean_logs.first_clean_time']) * 1000
+        let state = states['sensor.dreame_r2254_07f1_brush_left_time']
         
-        let original = new Date(cleanTime)
-        let date = new Date(cleanTime)
+        let original = new Date(state.last_changed)
+        let date = new Date(original)
         let now = new Date()
 
         date.setHours(0); date.setMinutes(0); date.setSeconds(0)
-        now.setHours(0); now.setMinutes(0); now.setSeconds(0)
+        now.setHours(0);   now.setMinutes(0);  now.setSeconds(0)
 
-        let days = parseInt((now-date) / (1000 * 60 * 60 * 24), 10)
+        let days = Math.round((now-date) / (1000 * 60 * 60 * 24))
 
         if ( days == 0 ) {
           let opts = { hour: '2-digit', minute:'2-digit', timeZone: 'Europe/Moscow' }        
