@@ -9,68 +9,109 @@
 
   show_state: true
   show_icon: false
+  show_label: true
+
+  variables: 
+    # a global function to generate similar span elements
+    _unit_function: >
+      [[[
+        this.unitSpan = function (is_ac_on, is_heat_on, is_floor_on, temp) {
+          var style = is_ac_on ? 'cold' : is_heat_on ? 'hot' : is_floor_on ? 'floor' : 'none'
+          return "<span class='" + style + "'>" + (Math.round(temp) || '--') + "°</span>"
+        }
+      ]]]
 
   # use custom fields to display state for each floor
   custom_fields:
+    occupy_1st: >
+      [[[ 
+        return (states['binary_sensor.group_sensors_1st'].state == 'on') ? '•' : ''
+      ]]]
+
+    occupy_2nd: >
+      [[[
+        return (states['binary_sensor.group_sensors_2nd'].state == 'on') ? '•' : ''
+      ]]]
+
+    occupy_3rd: >
+      [[[
+        return (states['binary_sensor.group_sensors_3rd'].state == 'on') ? '•' : ''
+      ]]]
+
     temp_1st: >
-        [[[ 
-          let is_ac_on = false
-          let is_heat_on = false
-          let is_floor_on = (states['switch.pump_floor_heating_1st'].state == 'on')
-          let temp = states['sensor.sonoff_living_room_temperature_temperature'].state 
+      [[[ 
+        let is_ac_on = false
+        let is_heat_on = false
+        let is_floor_on = (states['switch.pump_floor_heating_1st'].state == 'on')
+        let temp = states['sensor.sonoff_living_room_temperature_temperature'].state 
 
-          var style = is_ac_on ? 'cold' : is_heat_on ? 'hot' : is_floor_on ? 'floor' : 'none'
-
-          return "<span class='" + style + "'>" + (Math.round(temp) || '--') + "°</span>"
-        ]]]
+        return this.unitSpan(is_ac_on, is_heat_on, is_floor_on, temp)
+      ]]]
 
     temp_2nd: >
-        [[[ 
-          let is_ac_on = false
-          let is_heat_on = states['climate.thermostat_2nd_cabinet'].state == 'heat'
-                        || states['climate.thermostat_2nd_guest_room'].state == 'heat'
-                        || states['climate.thermostat_2nd_room1'].state == 'heat'
-          let is_floor_on = true
-          let temp = states['sensor.temperature_2nd_average'].state
+      [[[ 
+        let is_ac_on = false
+        let is_heat_on = states['climate.thermostat_2nd_cabinet'].state == 'heat'
+                      || states['climate.thermostat_2nd_guest_room'].state == 'heat'
+                      || states['climate.thermostat_2nd_room1'].state == 'heat'
+        let is_floor_on = true
+        let temp = states['sensor.temperature_2nd_average'].state
 
-          var style = is_ac_on ? 'cold' : is_heat_on ? 'hot' : is_floor_on ? 'floor' : 'none'
-
-          return "<span class='" + style + "'>" + (Math.round(temp) || '--') + "°</span>"
-        ]]]
+        return this.unitSpan(is_ac_on, is_heat_on, is_floor_on, temp)
+      ]]]
 
     temp_3rd: >
-        [[[ 
-          let is_ac_on = false
-          let is_heat_on = false
-          let is_floor_on = (states['switch.pump_floor_heating_3rd'].state == 'on')
-          let temp = states['sensor.temperature_bedroom'].state
+      [[[ 
+        let is_ac_on = false
+        let is_heat_on = false
+        let is_floor_on = (states['switch.pump_floor_heating_3rd'].state == 'on')
+        let temp = states['sensor.temperature_bedroom'].state
 
-          var style = is_ac_on ? 'cold' : is_heat_on ? 'hot' : is_floor_on ? 'floor' : 'none'
-
-          return "<span class='" + style + "'>" + (Math.round(temp) || '--') + "°</span>"
-        ]]]
+        return this.unitSpan(is_ac_on, is_heat_on, is_floor_on, temp)
+      ]]]
   
   styles:
     card: 
-      - background-image: url('/local/tablet/home_card_bg.png')
+      - background-image: url('/local/tablet/main_card_bg.png')
       - background-size: cover
       - background-color: '#00000099'
 
     custom_fields:
+      occupy_1st:
+        - position: absolute
+        - top: 198px
+        - left: 35px
+        - font-size: 40px
+        - color: "#68BD3D"
+
+      occupy_2nd:
+        - position: absolute
+        - top: 127px
+        - left: 35px
+        - font-size: 40px
+        - color: "#68BD3D"
+
+      occupy_3rd:
+        - position: absolute
+        - top: 45px
+        - left: 35px
+        - font-size: 40px
+        - color: "#68BD3D"                
+
       temp_1st:
         - position: absolute
         - top: 204px
-        - left: 75px
+        - left: 53px
 
       temp_2nd:
         - position: absolute
         - top: 132px
-        - left: 75px
+        - left: 53px
 
       temp_3rd:
         - position: absolute
         - top: 61px
-        - left: 75px
+        - left: 53px
 
 
   # use different styles for a different states:
