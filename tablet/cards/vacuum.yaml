@@ -29,9 +29,9 @@
   variables:
     clean_time: >
       [[[
-        let state = states['sensor.dreame_r2254_07f1_brush_left_time']
+        let timestamp = states['input_datetime.last_time_omni_1s_cleaned'].state
         
-        let original = new Date(state.last_changed)
+        let original = new Date(timestamp)
         let date = new Date(original)
         let now = new Date()
 
