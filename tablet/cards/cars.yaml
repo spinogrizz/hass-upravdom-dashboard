@@ -1,0 +1,51 @@
+- type: custom:button-card
+
+  view_layout:
+    grid-area: cars
+
+  styles:
+    grid:
+      - grid-template-areas: '"tesla" "haval"'
+      - grid-template-columns: 1fr
+      - grid-template-rows: 130px 130px
+
+    card:
+      - padding: 0px
+      - margin: 0px 
+      - background-color: "#00000000"
+      - border: none
+      - height: calc(100% + 5px)
+
+    custom_fields:
+      tesla:
+        - height: calc(100% - 5px)
+
+      haval:
+        - height: calc(100% - 5px)
+        - margin-top: 10px
+
+   
+  custom_fields:
+    tesla: 
+      card:
+        type: custom:button-card
+        template: car
+        variables:
+          name: tesla
+          present: true
+          charge: 85
+          is_charging: false
+          is_plugged: true
+          
+    haval: 
+      card:
+        type: custom:button-card
+        template: car
+        variables:
+          name: jolion
+          present: true
+          fuel: 12        
+
+
+
+

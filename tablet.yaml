@@ -9,11 +9,11 @@ views:
       grid-template-columns: 90px 162px 162px repeat(2, 120px) repeat(4, 90px)
       grid-template-rows: repeat(7, 90px)
       grid-template-areas: |
-        "light  main      main      none1    none1     cctv    cctv    cctv    cctv"
-        "light  main      main      none1    none1     cctv    cctv    cctv    cctv"
-        "light  main      main      none1    none1     cctv    cctv    cctv    cctv"
-        "light  weather   weather   none2    none2     tv      tv      av      av"
-        "light  weather   weather   none2    none2     tv      tv      av      av"
+        "light  main      main      cars     cars      cctv    cctv    cctv    cctv"
+        "light  main      main      cars     cars      cctv    cctv    cctv    cctv"
+        "light  main      main      cars     cars      cctv    cctv    cctv    cctv"
+        "light  weather   weather   none     none      tv      tv      av      av"
+        "light  weather   weather   none     none      tv      tv      av      av"
         "light  route     dog       vacuum   vacuum    avcon   avcon   avcon   avcon"
         "light  route     dog       vacuum   vacuum    volume  volume  volume  volume"
 

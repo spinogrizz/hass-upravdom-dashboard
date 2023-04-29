@@ -1,0 +1,100 @@
+car:
+  template:
+    - base
+    - fill_height
+
+  show_label: true
+
+  label: >
+    [[[ 
+      if ( variables.charge != undefined ) {
+        return variables.charge + " %</div>"
+      }
+      else if ( variables.fuel != undefined ) {
+        return variables.fuel + ' л'
+      } else {
+        return ""
+      }
+    ]]]
+
+  custom_fields:
+    charging_indicator: >
+      <ha-icon icon="mdi:lightning-bolt" style="width: 35px; height: 35px;"/>
+
+    needs_fuel: >
+      <ha-icon icon="mdi:gas-station" style="width: 32px; height: 32px;"/>
+
+
+  styles:
+    card:
+      - height: 125px
+      - background-size: cover
+      - background-image: >
+          [[[
+            return "url('/local/tablet/car_bg_" 
+                 + variables.name
+                 + "_" 
+                 + (variables.present ? "on" : "off")
+                 + ".png?xxxxxx')"
+          ]]]
+
+    label:
+      - position: absolute
+      - top: 16px
+      - right: 20px
+      - font-size: 28px
+      - opacity: 0.9
+      - color: >
+          [[[
+            let red    = "#CF4141"
+            let yellow = "#D5C539"
+            let green  = "#67C743"
+
+            if ( variables.charge != undefined ) {
+              let charge = variables.charge
+
+              if ( charge < 30 ) {
+                return red
+              } else if ( charge < 70 ) {
+                return yellow
+              } else {
+                return green
+              }
+            } else if ( variables.fuel != undefined ) {
+              let fuel = variables.fuel
+
+              if ( fuel < 15 ) {
+                return red
+              } else if ( fuel < 25 ) {
+                return yellow
+              } else {
+                return green
+              }
+            }
+          ]]]
+
+    custom_fields:
+      charging_indicator:
+        - position: absolute
+        - bottom: 16px
+        - right: 16px
+        - color: >
+            [[[
+              return variables.is_charging ? "#67C743" : "#FFFFFF88"
+            ]]]
+        
+        - visibility: >
+            [[[
+              return variables.is_plugged === true ? 'visible' : 'hidden'
+            ]]]
+
+      needs_fuel:
+        - position: absolute
+        - bottom: 16px
+        - right: 16px
+        - color: "#CF4141"
+        - visibility: >
+            [[[
+              return variables.fuel < 15 ? 'visible' : 'hidden'
+            ]]]            
+
