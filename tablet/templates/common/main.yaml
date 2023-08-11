@@ -1,10 +1,7 @@
-- type: custom:button-card
+main:
   template: 
     - base
     - fill_height
-
-  view_layout:
-    grid-area: main
 
   show_state: true
   show_icon: false
@@ -61,7 +58,7 @@
 
     temp_3rd: >
       [[[ 
-        let is_ac_on = false
+        let is_ac_on = states['input_boolean.bedroom_air_conditioning'].state == 'on'
         let is_heat_on = false
         let is_floor_on = (states['switch.pump_floor_heating_3rd'].state == 'on')
         let temp = states['sensor.temperature_bedroom'].state

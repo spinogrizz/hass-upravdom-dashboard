@@ -4,7 +4,7 @@ button_card_templates:
 views:
   - title: Home
     type: custom:grid-layout
-    background: center / cover no-repeat fixed url('/local/tablet/wallpaper.jpg')
+    background: center / cover no-repeat fixed url('/local/tablet/wallpaper_1st.jpg')
     layout:
       grid-template-columns: 90px 162px 162px repeat(2, 120px) repeat(4, 90px)
       grid-template-rows: repeat(7, 90px)
@@ -12,10 +12,10 @@ views:
         "light  main      main      cars     cars      cctv    cctv    cctv    cctv"
         "light  main      main      cars     cars      cctv    cctv    cctv    cctv"
         "light  main      main      cars     cars      cctv    cctv    cctv    cctv"
-        "light  weather   weather   none     none      tv      tv      av      av"
-        "light  weather   weather   none     none      tv      tv      av      av"
+        "light  weather   weather   forex    forex     tv      tv      av      av"
+        "light  weather   weather   forex    forex     tv      tv      av      av"
         "light  route     dog       vacuum   vacuum    avcon   avcon   avcon   avcon"
         "light  route     dog       vacuum   vacuum    volume  volume  volume  volume"
 
     cards:
-      !include_dir_merge_list tablet/cards
+      !include_dir_merge_list tablet/cards/1st

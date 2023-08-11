@@ -9,6 +9,7 @@ light:
   state:
     # make light icon glow when on
     - value: 'on'
+      id: glow
       styles:
         icon:
           - color: '#E5C04B'

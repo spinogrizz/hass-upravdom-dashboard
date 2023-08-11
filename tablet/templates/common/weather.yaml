@@ -1,10 +1,7 @@
-- type: custom:button-card
+weather:
   template: 
     - base
     - fill_height
-
-  view_layout:
-    grid-area: weather
 
   styles:
     grid:
@@ -23,7 +20,7 @@
     now: 
       card:
         type: custom:button-card
-        template: weather
+        template: weather_unit
         variables:  
           forecast: 0
         styles:
@@ -36,14 +33,14 @@
     later:
       card:
         type: custom:button-card
-        template: weather
+        template: weather_unit
         variables:  
           forecast: 2
 
     after:
       card:
         type: custom:button-card
-        template: weather
+        template: weather_unit
         variables:  
           forecast: 4
         styles:

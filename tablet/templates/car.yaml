@@ -49,16 +49,19 @@ car:
             let red    = "#CF4141"
             let yellow = "#D5C539"
             let green  = "#67C743"
+            let white  = "#FFFFFF"
 
             if ( variables.charge != undefined ) {
               let charge = variables.charge
 
               if ( charge < 30 ) {
                 return red
-              } else if ( charge < 70 ) {
+              } else if ( charge < 60 ) {
                 return yellow
+              } else if ( variables.is_charging ) {
+                return green 
               } else {
-                return green
+                return white
               }
             } else if ( variables.fuel != undefined ) {
               let fuel = variables.fuel
@@ -68,7 +71,7 @@ car:
               } else if ( fuel < 25 ) {
                 return yellow
               } else {
-                return green
+                return white
               }
             }
           ]]]

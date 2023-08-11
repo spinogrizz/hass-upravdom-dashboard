@@ -1,0 +1,36 @@
+# cctv viewer
+- type: custom:button-card
+  template: camera
+  
+  view_layout:
+    grid-area: cctv
+
+
+# main home thermostat
+- type: custom:button-card
+  template: main
+  
+  view_layout:
+    grid-area: main
+
+
+# travel time
+- type: custom:button-card
+  template: travel_time
+  
+  view_layout:
+    grid-area: route
+
+# weather
+- type: custom:button-card
+  template: weather
+  
+  view_layout:
+    grid-area: weather
+
+# roboforex
+- type: custom:button-card
+  template: forex
+
+  view_layout:
+    grid-area: forex

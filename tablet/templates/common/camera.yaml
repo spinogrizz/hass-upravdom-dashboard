@@ -1,11 +1,7 @@
-
-- type: custom:button-card
+camera:
   template:
     - base
     - fill_height
-
-  view_layout:
-    grid-area: cctv
 
   # tap to switch between cameras
   tap_action:

@@ -1,0 +1,100 @@
+forex:
+  template: 
+    - base
+    - fill_height
+
+  variables: 
+    red: "#AD3133"
+    blue: "#4580D2"
+
+  show_label: true
+
+  label: >
+    [[[
+      let profit = states['sensor.eve_roboforex'].state
+      let sign = profit < 0 ? "−" : "+"
+
+      return "<span style='opacity: 0.2'>"
+             + sign
+             + "</span>"
+             + " $"
+             + Math.floor(profit)
+    ]]]
+
+  custom_fields:
+    open_pl: |
+      [[[
+        let attrs = states['sensor.eve_roboforex'].attributes
+
+        if ( attrs.open_pl < 0 ) {
+          return "− $" + (-attrs.open_pl)
+        } else {
+          return "+ $" + attrs.open_pl
+        }
+      ]]]
+    orders: |
+      [[[
+          let attrs = states['sensor.eve_roboforex'].attributes
+          let buy = parseInt(attrs.buy)
+          let sell = parseInt(attrs.sell)
+          var html = ""
+          var cnt = 0
+
+          for ( let i=0; i<buy+sell; i++ ) {
+            html += "<span style='color: "
+                  + (i < buy ? variables.blue : variables.red)
+                  + "'>■</span>"
+
+            if ( ++cnt == 4 ) {
+              html += "<br/>"
+              cnt = 0
+            }
+          }
+        
+          return html
+      ]]]
+
+
+    
+  styles:
+    card:
+      - background-size: cover
+      - background-image: >
+          [[[
+            return "url('/local/tablet/eva_robot_bg.png?x"
+          ]]]
+
+    label:
+      - position: absolute
+      - top: 16px
+      - right: 20px
+      - font-size: 28px
+      - color: "#FFFFFFDD"
+
+    custom_fields:
+      open_pl:
+        - position: absolute
+        - top: 55px
+        - right: 20px
+        - font-size: 16px
+        - opacity: 0.8
+        - color: |
+            [[[
+              let attrs = states['sensor.eve_roboforex'].attributes
+              return attrs.open_pl < 0 ? variables.red : variables.blue
+            ]]]
+
+      orders:
+        - position: absolute
+        - bottom: 12px
+        - right: 20px
+        - font-family: Arial
+        - font-size: 13px
+        - text-align: left
+        - line-height: 16px
+        - letter-spacing: 0.4em
+        - transform: rotate(180deg)
+      
+
+
+

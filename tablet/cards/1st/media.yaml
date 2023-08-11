@@ -7,6 +7,10 @@
     action: call-service
     service: script.toggle_samsung_frame
 
+  triggers_update:
+    - media_player.samsung_frame
+    - input_text.media_latest_scene
+
   # Detect current source/mode 
   # art_mode=on means TV is off (Samsung Frame)
   variables: 
@@ -17,7 +21,7 @@
 
         if ( art_mode ) {
           return "art"
-        } else if ( source == 'Game Console' ) {
+        } else if ( source == 'Receiver' ) {
           return "games"
         } else if ( source == 'YouTube' ) {
           return "youtube"

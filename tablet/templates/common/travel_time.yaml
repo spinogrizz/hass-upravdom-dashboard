@@ -1,11 +1,8 @@
-- type: custom:button-card
+travel_time:
   entity: sensor.travel_time_kindergarden
   triggers_update:
     - sensor.every_1m
     - sensor.travel_time_kindergarden
-
-  view_layout:
-    grid-area: route
 
   template: 
     - base

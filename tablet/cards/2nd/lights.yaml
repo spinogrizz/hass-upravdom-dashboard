@@ -1,0 +1,100 @@
+# Колонка с выключателями света
+- type: vertical-stack
+  view_layout:
+    grid-area: light
+
+  cards:
+    - type: custom:button-card
+      entity: light.2nd_hallway_two_lights
+      template: light
+      icon: mdi:ceiling-light-outline
+      styles:
+        icon:
+          # default icon is a bit small, make it larger
+          - width: 60% 
+
+    - type: custom:button-card
+      entity: light.2nd_cabinet_light
+      template: light
+      icon: mdi:chair-rolling
+
+    - type: custom:button-card
+      entity: light.2nd_guest_room_light
+      icon: mdi:sofa-outline
+      template: light
+
+    - type: custom:button-card
+      entity: light.2nd_children_room_light
+      template: light
+      icon: mdi:unicorn-variant
+      triggers_update: binary_sensor.kids_room_motion_sensor_occupancy
+
+      variables: 
+        busy: >
+          [[[ 
+              let busy = states['binary_sensor.kids_room_motion_sensor_occupancy']
+              return (busy && busy.state == 'on')
+          ]]]
+
+      styles:
+        icon:
+          - width: 55%
+          - animation: >
+              [[[ return (variables.busy ? 'bounce 1s infinite' : 'none') ]]]
+          - transform: scale(-1, 1)     
+          - color: >
+              [[[ return (entity.state == 'on' ? '#9A61BD' : '#6F6F6F') ]]]
+
+        card:
+          - background: >
+              [[[
+                  if ( entity.state == 'on' && variables.busy ) {
+                    return 'radial-gradient(#22002299, #11001199)' 
+                  } else {
+                    return '#00000099'
+                  }
+              ]]]  
+
+      # unicorn dances when there is a motion in the room
+      extra_styles: |
+          @keyframes bounce {
+            0%, 20%, 50%, 80%, 100% { transform: translateY(0) scale(-1, 1); }
+            40% { transform: translateY(-4px) scale(-1, 1); }
+            60% { transform: translateY(-2px) scale(-1, 1); }
+          }
+
+      state:
+        - value: 'on'
+          id: glow
+          styles:
+            icon:
+              - color: '#9A61BD'
+              - filter: 'drop-shadow(0px 0px 6px #9A61BDBB)'
+            img_cell:
+              - filter: 'drop-shadow(0px 0px 20px #9A61BD99)'                 
+
+ 
+    - type: custom:button-card
+      entity: light.2nd_storage_room_light
+      template: light
+      icon: mdi:hammer-wrench
+
+    - type: custom:button-card
+      entity: light.2nd_bathroom_light
+      icon: mdi:toilet
+      template: light
+      triggers_update: binary_sensor.motion_2nd_bathroom
+      
+      styles:
+        card:
+          # show red background if bathroom is occupied
+          - background: >
+              [[[
+                  let occupancy = states['binary_sensor.motion_2nd_bathroom']
+                  return (entity.state == 'on' && occupancy && occupancy.state == 'on') ? 'radial-gradient(#77000099, #33000099)' : '#00000099'
+              ]]]
+
+    - type: custom:button-card
+      entity: light.all_lights_2nd_floor
+      template: light
+      icon: mdi:power

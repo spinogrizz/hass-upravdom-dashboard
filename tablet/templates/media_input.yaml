@@ -13,7 +13,7 @@ media_input:
     card:
       - background-color: >
           [[[
-            return states['media_player.marantz_nr1508'].attributes.source == variables.input ? '#25426FBB' : '#00000099'
+            return states['input_text.media_latest_scene'].state == variables.input ? '#25426FBB' : '#00000099'
           ]]]
 
   show_icon: true

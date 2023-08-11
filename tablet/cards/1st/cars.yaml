@@ -29,13 +29,25 @@
     tesla: 
       card:
         type: custom:button-card
+
+        tap_action:
+          action: call-service
+          service: rest_command.tesla_command
+          service_data: 
+            command: auto_conditioning
+            argument: 1
+
         template: car
         variables:
           name: tesla
-          present: true
-          charge: 85
-          is_charging: false
-          is_plugged: true
+          present: >
+            [[[ return states['binary_sensor.tesla_at_home'].state == 'on' ]]]
+          charge: >
+            [[[ return states['sensor.tesla_battery_level'].state ]]]
+          is_charging: >
+            [[[ return states['sensor.tesla_model_3'].state == 'charging' ]]]
+          is_plugged: >
+            [[[ return states['sensor.tesla_model_3'].state == 'plugged' ]]]
           
     haval: 
       card:

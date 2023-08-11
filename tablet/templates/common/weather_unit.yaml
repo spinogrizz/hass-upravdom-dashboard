@@ -1,4 +1,4 @@
-weather:
+weather_unit:
   entity: weather.openweathermap
 
   # use emojis to display weather state
