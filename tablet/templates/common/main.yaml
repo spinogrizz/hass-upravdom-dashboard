@@ -37,7 +37,8 @@ main:
     temp_1st: >
       [[[ 
         let is_ac_on = false
-        let is_heat_on = false
+        let is_heat_on = states['switch.heating_1st_entrance_hall'].state == 'on'
+                      || states['switch.heating_1st_living_room'].state == 'on'
         let is_floor_on = (states['switch.pump_floor_heating_1st'].state == 'on')
         let temp = states['sensor.sonoff_living_room_temperature_temperature'].state 
 
