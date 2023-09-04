@@ -1,0 +1,89 @@
+3dprinter:
+
+  show_name: false
+  show_state: false
+  show_label: true
+  show_icon: false
+
+  template: 
+    - base
+    - fill_height
+
+  icon: |
+    [[[
+      let status = (entity.state != 'Offline') ? 'online' : 'offline'
+      return "/local/tablet/" + variables.printer_name + "_" + status + ".png"
+    ]]]
+
+
+  custom_fields:
+    progress_bar: ""
+    progress_full: ""
+    progress_time: >
+      [[[
+        let time = variables.time
+
+        if ( isNaN(time) ) {
+          return ""
+        }
+
+        let hr = Math.floor(time / 60)
+        let min = time % 60
+
+        min = (min < 10 ) ? "0" + min : min
+        hr = (hr < 10 ) ? "0" + hr : hr
+
+        return hr + ":" + min
+      ]]]
+
+  styles:
+    card:
+      - background-size: cover
+      - background-image: >
+          [[[
+            let status = (entity.state != 'Offline') ? 'online' : 'offline'
+            let bg = "url(/local/tablet/" + variables.printer_name + "_" + status + ".png)"
+
+            if ( variables.is_finished ) {
+              bg += ", radial-gradient(#112B27, #111C25)"
+            }
+
+            return bg
+          ]]]
+
+    label: 
+      - font-size: 16pt
+      - position: absolute
+      - top: 10%
+      - left: 10%
+ 
+    custom_fields:
+      progress_time:
+        - font-size: 17pt
+        - position: absolute
+        - left: 10%
+        - bottom: 15%
+
+      progress_bar:
+        - position: absolute
+        - bottom: 10%
+        - left: 10%
+        - width: >
+            [[[
+              return parseInt(variables.progress_width * variables.percentage/100) + "px"
+            ]]]
+        - height: 4px
+        - border-radius: 1px
+        - background-color: '#FFFFFF'
+
+      progress_full:
+        - position: absolute
+        - bottom: 10%
+        - left: 10%
+        - width: >
+            [[[
+              return variables.progress_width + "px"
+            ]]]
+        - height: 4px
+        - border-radius: 1px
+        - background-color: '#FFFFFF22'

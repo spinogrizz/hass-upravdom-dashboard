@@ -71,6 +71,7 @@ weather_unit:
       - bottom: 28px
       - left: 4px
       - width: 100%
+      - color: white 
 
     custom_fields:
       weather_icon:

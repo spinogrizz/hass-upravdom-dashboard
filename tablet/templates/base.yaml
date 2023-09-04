@@ -5,7 +5,11 @@ base:
       - background-color: '#00000099'
       - border-width: 0
       - -webkit-backdrop-filter: blur(10px)
+      - color: white
+    label:
+      - color: white
     name:
+      - color: white
       - opacity: 0.8
 
 fill_width:

@@ -51,7 +51,7 @@ main:
         let is_heat_on = states['climate.thermostat_2nd_cabinet'].state == 'heat'
                       || states['climate.thermostat_2nd_guest_room'].state == 'heat'
                       || states['climate.thermostat_2nd_room1'].state == 'heat'
-        let is_floor_on = true
+        let is_floor_on = (states['switch.pump_floor_heating_2nd'].state == 'on')
         let temp = states['sensor.temperature_2nd_average'].state
 
         return this.unitSpan(is_ac_on, is_heat_on, is_floor_on, temp)

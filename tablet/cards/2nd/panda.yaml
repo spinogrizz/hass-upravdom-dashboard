@@ -1,0 +1,10 @@
+- type: custom:button-card
+  template: bambu
+  entity: sensor.bambu_lab_x1c_print_status
+
+  triggers_update:
+    - sensor.bambu_lab_x1c_print_progress
+    - sensor.bambu_lab_x1c_remaining_time
+
+  view_layout:
+    grid-area: panda

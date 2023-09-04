@@ -12,10 +12,10 @@ views:
         "light  main      main      none1    none1     cctv    cctv    cctv    cctv"
         "light  main      main      none1    none1     cctv    cctv    cctv    cctv"
         "light  main      main      none1    none1     cctv    cctv    cctv    cctv"
-        "light  weather   weather   forex    forex     none4   none4   none4   none4"
-        "light  weather   weather   forex    forex     none4   none4   none4   none4"
-        "light  route     none2     none2    none2     none4   none4   none4   none4"
-        "light  route     none2     none2    none2     none4   none4   none4   none4"
+        "light  weather   weather   forex    forex     none3   none3   none3   none3"
+        "light  weather   weather   forex    forex     none3   none3   none3   none3"
+        "light  route     none2     panda    panda     loopa   loopa   poopa   poopa"
+        "light  route     none2     panda    panda     loopa   loopa   poopa   poopa"
 
     cards:
       !include_dir_merge_list tablet/cards/2nd 

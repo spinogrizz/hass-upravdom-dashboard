@@ -1,0 +1,39 @@
+bambu:
+  template: 3dprinter
+
+  label: >
+    [[[
+      let state = entity.state
+
+      switch ( state ) {
+        case 'Idle':
+          return "Сплю"
+          break
+
+        case 'Running':
+          return "Печатаю"
+          break
+        
+        case 'Finish':
+          return "Готово"
+          break
+
+        default:
+          return ""
+      }
+    ]]]
+
+  variables:
+    printer_name: bambu
+    progress_width: 70
+
+    percentage: >
+      [[[ return states["sensor.bambu_lab_x1c_print_progress"].state ]]]
+    time: >
+      [[[ return states["sensor.bambu_lab_x1c_remaining_time"].state ]]]
+
+    is_finished: |
+      [[[
+        return entity.state == 'Finish'
+      ]]]
+
