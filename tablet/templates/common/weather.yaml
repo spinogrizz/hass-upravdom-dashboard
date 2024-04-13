@@ -22,7 +22,7 @@ weather:
         type: custom:button-card
         template: weather_unit
         variables:  
-          forecast: 0
+          forecast: now
         styles:
           custom_fields:
             weather_icon:
@@ -35,14 +35,14 @@ weather:
         type: custom:button-card
         template: weather_unit
         variables:  
-          forecast: 2
+          forecast: after
 
     after:
       card:
         type: custom:button-card
         template: weather_unit
         variables:  
-          forecast: 4
+          forecast: later
         styles:
           custom_fields:
             weather_icon:

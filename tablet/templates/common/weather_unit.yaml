@@ -1,14 +1,19 @@
 weather_unit:
-  entity: weather.openweathermap
+  entity: sensor.weather_forecast_extra
 
   # use emojis to display weather state
   # every emoji is a bit different, so use <span> to tweak their size and position slightly
   custom_fields: 
     weather_icon: >
       [[[
-        let time = new Date(entity.attributes.forecast[variables.forecast].datetime)
+        //console.log(states['weather.openweathermap'])
+
+        let time = new Date(entity.attributes[variables.forecast+'_date'])
         let hours = time.getHours()
-        let condition = entity.attributes.forecast[variables.forecast].condition
+        let condition = entity.attributes[variables.forecast+'_cond']
+
+        //let hours = 15
+        //let condition = 'cloudy'
 
         switch (condition) {
 
@@ -38,7 +43,7 @@ weather_unit:
 
   label: >
     [[[
-      return parseInt(entity.attributes.forecast[variables.forecast].temperature) + '°'
+      return parseInt(entity.attributes[variables.forecast+'_temp']) + '°'
     ]]]
 
   styles:
@@ -48,10 +53,12 @@ weather_unit:
       # lighter color — during the day
       - background: >
           [[[
-            let time = new Date(entity.attributes.forecast[variables.forecast].datetime)
+            let time = new Date(entity.attributes[variables.forecast+'_date'])
             let hours = time.getHours()
 
-            if ( hours > 22 || hours < 7 ) {
+            console.log(hours)
+
+            if ( hours > 21 || hours < 7 ) {
               return '#00001155'
             } else if ( hours > 11 && hours < 17 ) {
               return '#E5C04B09'
