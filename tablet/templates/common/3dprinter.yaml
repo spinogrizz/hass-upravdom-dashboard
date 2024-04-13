@@ -9,13 +9,6 @@
     - base
     - fill_height
 
-  icon: |
-    [[[
-      let status = (entity.state != 'Offline') ? 'online' : 'offline'
-      return "/local/tablet/" + variables.printer_name + "_" + status + ".png"
-    ]]]
-
-
   custom_fields:
     progress_bar: ""
     progress_full: ""
@@ -23,7 +16,7 @@
       [[[
         let time = variables.time
 
-        if ( isNaN(time) ) {
+        if ( isNaN(time) || variables.is_printing == false ) {
           return ""
         }
 
@@ -42,7 +35,7 @@
       - background-image: >
           [[[
             let status = (entity.state != 'Offline') ? 'online' : 'offline'
-            let bg = "url(/local/tablet/" + variables.printer_name + "_" + status + ".png)"
+            let bg = "url(/local/tablet/3d_" + variables.printer_name + "_" + status + ".png)"
 
             if ( variables.is_finished ) {
               bg += ", radial-gradient(#112B27, #111C25)"
@@ -54,7 +47,7 @@
     label: 
       - font-size: 16pt
       - position: absolute
-      - top: 10%
+      - top: 11%
       - left: 10%
  
     custom_fields:
@@ -69,9 +62,7 @@
         - bottom: 10%
         - left: 10%
         - width: >
-            [[[
-              return parseInt(variables.progress_width * variables.percentage/100) + "px"
-            ]]]
+            [[[ return parseInt(variables.progress_width * variables.percentage/100) + "px" ]]]
         - height: 4px
         - border-radius: 1px
         - background-color: '#FFFFFF'
@@ -81,9 +72,10 @@
         - bottom: 10%
         - left: 10%
         - width: >
-            [[[
-              return variables.progress_width + "px"
-            ]]]
+            [[[ return variables.progress_width + "px" ]]]
         - height: 4px
         - border-radius: 1px
-        - background-color: '#FFFFFF22'
+        - background-color: '#FFFFFF'
+        - opacity: >
+            [[[ return (entity.state == "Idle" || entity.state == "Finish") ? "0.0" : "0.1" ]]]
+
