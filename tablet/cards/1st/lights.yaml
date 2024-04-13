@@ -7,6 +7,7 @@
     - type: custom:button-card
       entity: light.1st_hallway_light
       template: light
+      icon: mdi:bicycle
       styles:
         icon:
           # default icon is a bit small, make it larger
