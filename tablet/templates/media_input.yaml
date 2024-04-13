@@ -8,6 +8,7 @@ media_input:
 
   styles:
     icon:
+      - color: white
       - width: 50%
 
     card:
