@@ -26,9 +26,11 @@
   view_layout:
     grid-area: weather
 
-# roboforex
 - type: custom:button-card
-  template: forex
+  template: 
+    - base
+    - fill_height
 
   view_layout:
-    grid-area: forex
+    grid-area: none
+

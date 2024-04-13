@@ -12,8 +12,8 @@ views:
         "light  main      main      cars     cars      cctv    cctv    cctv    cctv"
         "light  main      main      cars     cars      cctv    cctv    cctv    cctv"
         "light  main      main      cars     cars      cctv    cctv    cctv    cctv"
-        "light  weather   weather   forex    forex     tv      tv      av      av"
-        "light  weather   weather   forex    forex     tv      tv      av      av"
+        "light  weather   weather   none     none      tv      tv      av      av"
+        "light  weather   weather   none     none      tv      tv      av      av"
         "light  route     dog       vacuum   vacuum    avcon   avcon   avcon   avcon"
         "light  route     dog       vacuum   vacuum    volume  volume  volume  volume"
 

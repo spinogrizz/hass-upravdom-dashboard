@@ -145,18 +145,19 @@
           show: false
 
         # These hacks allows more accurate embedding of slider-card inside button-card
-        style: |
-          :host {
-              --ha-card-background: linear-gradient(to right, #1D081E, #0A171F) !important;
-          }
+        card_mod:
+          style: |
+            :host {
+                --ha-card-background: linear-gradient(to right, #1D081E, #0A171F) !important;
+            }
 
-          ha-card {
-            border: none;
-          }
-
-          .slider-bg {
-            --slider-bg-color: #3F3D67 !important;
-          }
+            .slider-bg {
+              --slider-bg-color: #3F3D67 !important;
+            }
+            
+            .slider-thumb::before {
+              background-color: purple !important;
+            }
 
   styles:
     icon: 

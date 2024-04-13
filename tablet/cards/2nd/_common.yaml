@@ -28,10 +28,10 @@
   view_layout:
     grid-area: weather
 
-# roboforex
-- type: custom:button-card
-  template: forex
+# # roboforex
+# - type: custom:button-card
+#   template: forex
 
-  view_layout:
-    grid-area: forex
+#   view_layout:
+#     grid-area: forex
 
