@@ -5,7 +5,7 @@
 
   styles:
     grid:
-      - grid-template-areas: '"tesla" "haval"'
+      - grid-template-areas: '"tesla" "travel"'
       - grid-template-columns: 1fr
       - grid-template-rows: 130px 130px
 
@@ -20,7 +20,7 @@
       tesla:
         - height: calc(100% - 5px)
 
-      haval:
+      travel:
         - height: calc(100% - 5px)
         - margin-top: 10px
 
@@ -49,14 +49,10 @@
           is_plugged: >
             [[[ return states['sensor.tesla_model_3'].state == 'plugged' ]]]
           
-    haval: 
+    travel: 
       card:
         type: custom:button-card
-        template: car
-        variables:
-          name: jolion
-          present: true
-          fuel: 12        
+        template: travel_time    
 
 
 

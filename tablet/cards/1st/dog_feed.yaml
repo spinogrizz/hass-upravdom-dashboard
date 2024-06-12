@@ -6,7 +6,7 @@
 
   template: 
     - base
-    - fill_height
+    - height-2rows
 
   show_entity_picture: true
   show_state: false

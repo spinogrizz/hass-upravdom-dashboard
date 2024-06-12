@@ -6,7 +6,9 @@ travel_time:
 
   template: 
     - base
-    - fill_height
+    - height-1-5-rows
+
+  layout: icon_name_state2nd
 
   # Show green/yellow/red traffic light depending on a travel time
   state:
@@ -26,17 +28,19 @@ travel_time:
       entity_picture: '/local/tablet/icons/traffic_red.png'
 
   styles:
-    icon:
-      - width: 45%
+    entity_picture:
+      - width: 50px
+      - display: block
 
     label:
       - font-size: 23pt
       - position: relative
-      - top: -25%
+      - top: 0
 
   show_label: true
   show_name: false
   show_entity_picture: true
+  show_icon: true
 
   # In the morning and only on weekdays show arrival time to destination,
   # or show travel time otherwise

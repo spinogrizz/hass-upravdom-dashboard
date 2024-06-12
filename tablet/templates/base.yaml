@@ -17,12 +17,22 @@ fill_width:
     card:
       - width: 100% 
 
-fill_height:
+height-1row:
   styles:
     card:
-    - height: calc( 100% + 5px )      
+      - height: 82px
 
-fill:
-  template:
-    - fill_width
-    - fill_height
+height-1-5-rows:
+  styles:
+    card:
+      - height: 123px
+
+height-2rows:
+  styles:
+    card:
+      - height: 172px
+
+height-3rows:
+  styles:
+    card:
+      - height: 262px

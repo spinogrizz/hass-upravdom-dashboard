@@ -114,7 +114,7 @@
 - type: custom:button-card
   template:
     - base
-    - fill_height
+    - height-1row
 
   icon: mdi:volume-high
   show_icon: true

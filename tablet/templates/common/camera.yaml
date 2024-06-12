@@ -1,7 +1,7 @@
 camera:
   template:
     - base
-    - fill_height
+    - height-3rows
 
   # tap to switch between cameras
   tap_action:

@@ -1,7 +1,7 @@
 car:
   template:
     - base
-    - fill_height
+    - height-1-5-rows
 
   show_label: true
 

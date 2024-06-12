@@ -1,7 +1,7 @@
 weather:
   template: 
     - base
-    - fill_height
+    - height-2rows
 
   styles:
     grid:

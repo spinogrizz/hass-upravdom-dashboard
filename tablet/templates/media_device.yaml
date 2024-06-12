@@ -1,7 +1,7 @@
 media_device:
   template:
   - base
-  - fill_height
+  - height-2rows
 
   show_icon: false
   show_label: true

@@ -12,13 +12,6 @@
   view_layout:
     grid-area: main
 
-# travel time
-- type: custom:button-card
-  template: travel_time
-  
-  view_layout:
-    grid-area: route
-
 # weather
 - type: custom:button-card
   template: weather
@@ -26,11 +19,20 @@
   view_layout:
     grid-area: weather
 
+# empty spaces
 - type: custom:button-card
   template: 
     - base
-    - fill_height
+    - height-2rows
 
   view_layout:
-    grid-area: none
+    grid-area: none1
 
+
+- type: custom:button-card
+  template: 
+    - base
+    - height-2rows
+
+  view_layout:
+    grid-area: none2

@@ -1,7 +1,7 @@
 main:
   template: 
     - base
-    - fill_height
+    - height-3rows
 
   show_state: true
   show_icon: false
@@ -98,17 +98,20 @@ main:
       temp_1st:
         - position: absolute
         - top: 204px
-        - left: 53px
+        - width: 66px
+        - left: 52px
 
       temp_2nd:
         - position: absolute
         - top: 132px
-        - left: 53px
+        - width: 66px
+        - left: 52px
 
       temp_3rd:
         - position: absolute
         - top: 61px
-        - left: 53px
+        - width: 66px
+        - left: 52px
 
 
   # use different styles for a different states:
@@ -126,7 +129,7 @@ main:
       .cold { background-color: #4F8ABD; }
       .hot { background-color: #BD4F4F; }
 
-      .floor:after {
+      .floor:after { 
         content: ""; 
         float: left; 
         background: #BD4F4F; 

@@ -1,7 +1,7 @@
 forex:
   template: 
     - base
-    - fill_height
+    - height-2rows
 
   variables: 
     red: "#AD3133"
