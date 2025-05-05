@@ -21,7 +21,8 @@
     ]]]
 
   triggers_update: 
-    - binary_sensor.motion_living_room_sensor_occupancy
+    - binary_sensor.aqara_fp1_living_room_presence
+    - binary_sensor.tuya_living_room_motion_zaniatost
 
   variables:
     # show 'dog is hungry' state when feed time exceeds 7 hours

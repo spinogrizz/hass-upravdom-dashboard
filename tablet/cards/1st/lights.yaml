@@ -37,15 +37,15 @@
       entity: light.1st_bathroom_light
       icon: mdi:toilet
       template: light
-      triggers_update: binary_sensor.motion_xiaomi_retro_bathroom_occupancy
+      triggers_update: binary_sensor.aqara_retro_bathroom_motion_zaniatost
       
       styles:
         card:
           # show red background if bathroom is occupied
           - background: >
               [[[
-                  let occupancy = states['binary_sensor.motion_xiaomi_retro_bathroom_occupancy']
-                  return (entity.state == 'on' && occupancy && occupancy.state == 'on') ? 'radial-gradient(#77000099, #33000099)' : '#00000099'
+                  let occupancy = states['binary_sensor.aqara_retro_bathroom_motion_zaniatost']
+                  return (entity.state == 'on' && occupancy.state == 'on') ? 'radial-gradient(#77000099, #33000099)' : '#00000099'
               ]]]
 
     - type: custom:button-card

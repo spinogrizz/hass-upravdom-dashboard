@@ -1,9 +1,9 @@
 # cctv viewer
-- type: custom:button-card
-  template: camera
+# - type: custom:button-card
+#   template: camera
   
-  view_layout:
-    grid-area: cctv
+#   view_layout:
+#     grid-area: cctv
 
 
 # main home thermostat
@@ -16,7 +16,9 @@
 
 # travel time
 - type: custom:button-card
-  template: travel_time
+  template: 
+   - travel_time
+   - height-2rows
   
   view_layout:
     grid-area: route
@@ -34,4 +36,3 @@
 
 #   view_layout:
 #     grid-area: forex
-

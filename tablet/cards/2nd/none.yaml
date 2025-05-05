@@ -14,13 +14,13 @@
   view_layout:
     grid-area: none2
 
-- type: custom:button-card
-  template: 
-    - base
-    - height-2rows
+# - type: custom:button-card
+#   template: 
+#     - base
+#     - height-2rows
 
-  view_layout:
-    grid-area: none3
+#   view_layout:
+#     grid-area: none3
 
 - type: custom:button-card
   template: 

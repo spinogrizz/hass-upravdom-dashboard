@@ -2,24 +2,105 @@ travel_time:
   entity: sensor.travel_time_kindergarden
   triggers_update:
     - sensor.every_1m
-    - sensor.travel_time_kindergarden
 
   template: 
     - base
     - height-1-5-rows
 
-  layout: icon_name_state2nd
+  styles:
+    grid:
+      - grid-template-areas: |
+          "there"
+          "back"
+      - grid-template-columns: 1fr
+      - grid-template-rows: min-content min-content
+    card:
+      - padding: 11px 0px 0px 0px
+      - margin: 0px
+
+  show_label: false
+  show_name: false
+  show_entity_picture: false
+  show_icon: false
+
+  custom_fields:
+    there:
+      card:
+        type: custom:button-card
+        template: travel_time_unit
+        entity: sensor.travel_time_kindergarden
+        variables:
+          entity_picture_size: 40px
+          opacity: 0.95
+          aux_icon: ""
+
+    back:
+      card:
+        type: custom:button-card
+        template: travel_time_unit
+        entity: sensor.travel_time_back_home
+        variables:
+          entity_picture_size: 32px
+          opacity: 0.4
+          aux_icon: "↻"
+
+travel_time_unit:
+  show_icon: false
+  show_entity_picture: true
+  show_label: true
+  show_name: false
+
+  layout: icon_label
+
+  custom_fields:
+    aux_icon: "[[[ return variables.aux_icon ]]]"
+
+  styles:
+    card:
+      - background: none
+      - border: none
+      - height: 50px
+      - opacity: "[[[ return variables.opacity ]]]"
+
+    # значок светофора
+    entity_picture:
+      - width: >
+          [[[
+            return variables.entity_picture_size
+          ]]]
+      - display: block
+      - margin-left: 65px
+
+    # сам текст с минутами
+    label:
+      - font-size: 21pt
+      - position: relative
+      - top: 0
+      - left: -12px
+      - color: white
+      - margin-left: 10px
+      - width: auto
+
+    custom_fields:
+      aux_icon:
+        - font-size: 22pt
+        - position: absolute
+        - left: 16px
+        - top: 2px
+        - color: white
+        - font-weight: 800
+
 
   # Show green/yellow/red traffic light depending on a travel time
   state:
     - id: green
       operator: '<'
-      value: 30
+      value: 20
       entity_picture: '/local/tablet/icons/traffic_green.png'
 
     - id: yellow
       operator: '<'
-      value: 49
+      value: 30
       entity_picture: '/local/tablet/icons/traffic_yellow.png'
 
     - id: red
@@ -27,38 +108,10 @@ travel_time:
       value: 999
       entity_picture: '/local/tablet/icons/traffic_red.png'
 
-  styles:
-    entity_picture:
-      - width: 50px
-      - display: block
-
-    label:
-      - font-size: 23pt
-      - position: relative
-      - top: 0
-
-  show_label: true
-  show_name: false
-  show_entity_picture: true
-  show_icon: true
-
-  # In the morning and only on weekdays show arrival time to destination,
-  # or show travel time otherwise
   label: >
     [[[
-      let arrival = new Date(Date.now() + entity.state * 60_000)
-      
-      let hr = arrival.getHours()
-      let min = arrival.getMinutes()
-      let weekday = (new Date).getDay()
-
-      if ( hr >= 6 && hr <= 10 && weekday != 0 && weekday != 6 ) {
-        if (min < 10) {
-          min = "0" + min
-        }
-
-        return hr + ":" + min
-      } else {
-        return parseInt(entity.state) + " <span style='font-size: 16pt'>мин</span>"
-      }
+      return entity ? parseInt(entity.state)
+            + "&nbsp;<span style='font-size: 15pt'>мин</span>"
+         : ''
     ]]]  
+

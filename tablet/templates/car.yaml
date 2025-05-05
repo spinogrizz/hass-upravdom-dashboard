@@ -7,8 +7,8 @@ car:
 
   label: >
     [[[ 
-      if ( variables.charge != undefined ) {
-        return variables.charge + " %</div>"
+      if ( variables.charge != undefined && variables.charge != "unavailable" ) {
+        return (variables.charge || "--") + " %</div>"
       }
       else if ( variables.fuel != undefined ) {
         return variables.fuel + ' л'
@@ -56,10 +56,8 @@ car:
 
               if ( charge < 30 ) {
                 return red
-              } else if ( charge < 60 ) {
+              } else if ( charge < 65 ) {
                 return yellow
-              } else if ( variables.is_charging ) {
-                return green 
               } else {
                 return white
               }

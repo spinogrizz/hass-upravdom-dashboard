@@ -21,8 +21,8 @@
 
         if ( art_mode ) {
           return "art"
-        } else if ( source == 'Receiver' ) {
-          return "games"
+        } else if ( source == 'TV/HDMI' ) {
+          return "receiver"
         } else if ( source == 'YouTube' ) {
           return "youtube"
         } else {
@@ -37,9 +37,9 @@
   label: >
     [[[
       switch ( variables.mode ) {
-        case 'games':     return 'Games'
-        case 'youtube':   return 'YouTube'
-        default:          return ''
+        case 'receiver':     return 'Receiver'
+        case 'youtube':      return 'YouTube'
+        default:             return ''
       }
     ]]]
 

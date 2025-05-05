@@ -27,12 +27,12 @@
       entity: light.2nd_children_room_light
       template: light
       icon: mdi:unicorn-variant
-      triggers_update: binary_sensor.kids_room_motion_sensor_occupancy
+      triggers_update: binary_sensor.tuya_kids_motion_zaniatost
 
       variables: 
         busy: >
           [[[ 
-              let busy = states['binary_sensor.kids_room_motion_sensor_occupancy']
+              let busy = states['binary_sensor.tuya_kids_motion_zaniatost']
               return (busy && busy.state == 'on')
           ]]]
 
@@ -83,14 +83,14 @@
       entity: light.2nd_bathroom_light
       icon: mdi:toilet
       template: light
-      triggers_update: binary_sensor.motion_2nd_bathroom
+      triggers_update: binary_sensor.aqara_mario_bathroom_motion_zaniatost
       
       styles:
         card:
           # show red background if bathroom is occupied
           - background: >
               [[[
-                  let occupancy = states['binary_sensor.motion_2nd_bathroom']
+                  let occupancy = states['binary_sensor.aqara_mario_bathroom_motion_zaniatost']
                   return (entity.state == 'on' && occupancy && occupancy.state == 'on') ? 'radial-gradient(#77000099, #33000099)' : '#00000099'
               ]]]
 

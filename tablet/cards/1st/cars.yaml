@@ -30,24 +30,24 @@
       card:
         type: custom:button-card
 
-        tap_action:
-          action: call-service
-          service: rest_command.tesla_command
-          service_data: 
-            command: auto_conditioning
-            argument: 1
+ #       tap_action:
+ #         action: call-service
+ #         service: rest_command.tesla_command
+ #         service_data: 
+ #           command: auto_conditioning
+ #           argument: 1
 
         template: car
         variables:
           name: tesla
           present: >
-            [[[ return states['binary_sensor.tesla_at_home'].state == 'on' ]]]
+            [[[ return states['device_tracker.spacex_location']?.state == 'home' ]]]
           charge: >
-            [[[ return states['sensor.tesla_battery_level'].state ]]]
+            [[[ return states['sensor.spacex_battery_level']?.state ]]]
           is_charging: >
-            [[[ return states['sensor.tesla_model_3'].state == 'charging' ]]]
+            [[[ return states['sensor.spacex_charging']?.state == 'charging' ]]]
           is_plugged: >
-            [[[ return states['sensor.tesla_model_3'].state == 'plugged' ]]]
+            [[[ return states['binary_sensor.spacex_charge_cable']?.state == 'on' ]]]
           
     travel: 
       card:
