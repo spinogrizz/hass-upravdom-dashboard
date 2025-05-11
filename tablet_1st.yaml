@@ -14,8 +14,8 @@ views:
         "light  main      main      cars     cars      cctv    cctv    cctv    cctv"
         "light  weather   weather   none2    none2     tv      tv      av      av"
         "light  weather   weather   none2    none2     tv      tv      av      av"
-        "light  none1     dog       vacuum   vacuum    avcon   avcon   avcon   avcon"
-        "light  none1     dog       vacuum   vacuum    volume  volume  volume  volume"
+        "light  unifi     dog       vacuum   vacuum    avcon   avcon   avcon   avcon"
+        "light  unifi     dog       vacuum   vacuum    volume  volume  volume  volume"
 
     cards:
       !include_dir_merge_list tablet/cards/1st

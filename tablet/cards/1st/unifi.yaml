@@ -1,0 +1,164 @@
+- type: custom:button-card
+  entity: sensor.wan_download_speed
+
+  view_layout:
+    grid-area: unifi
+
+  template: 
+    - base
+    - height-2rows
+
+  card:
+    - padding: 0px
+    - margin: 0px 
+    - background-color: "#00000000"
+    - border: none
+    - padding-bottom: 0px
+
+  variables:
+    download_speed: |
+      [[[
+        return states['sensor.wan_download_speed'].state
+      ]]]
+    upload_speed: |
+      [[[
+        return states['sensor.wan_upload_speed'].state
+      ]]]
+    status: |
+      [[[
+        const isp_state = states['sensor.gateway_google_wan_latency']
+        const lte_state = states['sensor.gateway_google_wan2_latency']
+
+        const isp = isp_state.state != "unknown" && parseFloat(isp_state.state) > 0;
+        const lte = lte_state.state != "unknown" && parseFloat(lte_state.state) > 0;
+        
+        if (!isp && lte) return "lte";
+        if (!isp && !lte) return "down";
+        return "normal";
+      ]]]
+
+  styles:
+    card:
+      # show red background if no internet connection
+      - background: |
+          [[[
+            if (variables.status == "down") {
+              return "radial-gradient(#33000077 50%, #66000077)"
+            } else if (variables.status == "lte") {
+              return "radial-gradient(#00334477 50%, #00667777)"
+            } else {
+              return "#00000099"
+            }
+          ]]]
+      - padding-bottom: 0px
+
+    label:
+      - font-size: 23pt
+      - position: relative
+      - top: -22%
+    
+    custom_fields:
+      status:
+        - font-size: 20px
+        - position: absolute
+        - top: 16px
+        - width: 100%
+        - font-weight: 500
+        - text-align: center
+        - opacity: 0.8
+
+      speed_graph:
+        - border: none
+        - margin: 0px
+        - height: 73px
+        - width: 100
+        - border: none
+
+      speed_text:
+        - font-size: 26px
+        - position: absolute
+
+        # if there are not status info, move speed info higher
+        - top: |
+            [[[
+              if (variables.status === "normal") {
+                return "30px";
+              } else {
+                return "56px";
+              }
+            ]]]
+        - text-align: center
+        - width: 100%
+        - font-weight: 500
+
+  custom_fields:
+    # optional status info in the top part of the card
+    status: >
+      [[[
+        const cell_icon = "<ha-icon icon='mdi:signal' style='width: 18px; height: 18px; position: relative; top: -1px;'></ha-icon>"
+
+        if (variables.status === "lte") {
+          return cell_icon + " LTE";
+        } else if (variables.status === "down") {
+          return "Интернет всё";
+        }
+        return "";
+      ]]]
+
+    # current download and upload speed
+    speed_text: >
+      [[[
+        function formatSpeed(speed) {
+          const value = speed < 10 ? speed.toFixed(1) : 
+                        Math.round(speed);
+          return `${value} <span style='font-size: 14px; opacity: 0.6;'>Mbps</span>`;
+        }
+
+        function printSpeed(value, color, direction) {
+          return `<span style="color: ${color}">`
+          + `<span style="opacity: 0.6;">`
+          + direction
+          + `</span> `
+          + formatSpeed(value)
+          + `</span>`;
+        }
+
+        const download = parseFloat(variables.download_speed);
+        const upload = parseFloat(variables.upload_speed);
+
+        return printSpeed(download, "#63bde3", "↓")
+             + "<br/>"
+             + printSpeed(upload, "#b47cde", "↑");
+      ]]]
+
+    # combined download and upload speed graphs
+    speed_graph:
+      card:
+        type: custom:mini-graph-card
+        entities:
+          - entity: sensor.wan_download_speed
+            color: "#63bde3"
+
+          - entity: sensor.wan_upload_speed
+            color: "#b47cde"
+
+        show: { labels: false, points: false, name: false, icon: false, state: false, legend: false }
+
+        hours_to_show: 1
+        points_per_hour: 60
+        smoothing: true
+        height: 200
+        width: 100%
+        line_width: 5
+        lower_bound: -1
+        upper_bound: ~300
+        logarithmic: true
+
+        card_mod:
+          style: |
+            ha-card {
+              background: transparent;
+              border: none;
+            }
+        
+  

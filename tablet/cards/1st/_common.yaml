@@ -20,13 +20,13 @@
     grid-area: weather
 
 # empty spaces
-- type: custom:button-card
-  template: 
-    - base
-    - height-2rows
+# - type: custom:button-card
+#   template: 
+#     - base
+#     - height-2rows
 
-  view_layout:
-    grid-area: none1
+#   view_layout:
+#     grid-area: none1
 
 
 - type: custom:button-card
