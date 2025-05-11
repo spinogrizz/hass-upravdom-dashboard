@@ -13,20 +13,17 @@
   show_label: true
   show_name: false
 
-  # show appropriate icon for a feeding state
-  entity_picture: |
-    [[[
-      return "/local/tablet/icons/"
-             + ((variables.fed_time > variables.interval) ? "dog_hungry.png" : "dog_fed.png")
-    ]]]
-
   triggers_update: 
     - binary_sensor.aqara_fp1_living_room_presence
     - binary_sensor.tuya_living_room_motion_zaniatost
+    - binary_sensor.backyard_door
 
   variables:
-    # show 'dog is hungry' state when feed time exceeds 7 hours
-    interval: 25200 
+    # show 'dog is hungry' state when feed time exceeds 5 hours
+    hungry_interval: 18000 
+
+    # show 'dog wants to go out' when backyard door is closed for 5 hours
+    walk_interval: 18000
 
     # calculate feed time by substracting input_datetime from "now" timestamp
     fed_time: |
@@ -36,35 +33,79 @@
         return now - fed
       ]]]
 
-  # show "hooray" if fed in less than 4 hours
-  # display time since last feeding time otherwise
-  label: |
-    [[[
-      let h = parseInt((variables.fed_time / 3600) % 24)
+    # calculate time since last door opening
+    door_time: |
+      [[[
+        let door = new Date(states['binary_sensor.backyard_door'].last_changed).getTime()/1000
+        let now = new Date().getTime()/1000
+        return now - door
+      ]]]
 
-      if ( h <= 1 ) {
-        return "Ура!"
-      } else if ( h <= 4 ) {
-        return h + " <span style='font-size: 16pt'>часа</span>"
-      } else { 
-        return h + " <span style='font-size: 16pt'>часов</span>"
+  # show appropriate icon for a feeding state
+  entity_picture: |
+    [[[
+      let state = "happy";
+      if (variables.fed_time > variables.hungry_interval) {
+        state = "cry";
       }
+      else if (variables.door_time > variables.walk_interval) {
+        state = "sad";
+      }
+      else if (variables.fed_time < 1800) {
+        state = "thumb";
+      }
+
+      return "/local/tablet/icons/dog_" + state + ".png"
     ]]]
 
-  # use green/red gradient background to show feed state
+  # show appropriate label based on conditions
+  label: |
+    [[[
+      let h = Math.ceil((variables.fed_time / 3600) * 10) / 10
+      let doorDate = new Date(states['binary_sensor.backyard_door'].last_changed)
+      let doorTime = doorDate.getHours().toString().padStart(2, '0') + ':' + 
+                    doorDate.getMinutes().toString().padStart(2, '0')
+
+      if (variables.fed_time > variables.hungry_interval) {
+        return Math.ceil(h) + " <span style='font-size: 16pt'>часов</span>"
+      }
+      else if (variables.door_time > variables.walk_interval) {
+        return "🚪 " + doorTime + "&nbsp"
+      }
+      else if (h <= 0.5) {
+        return "Ура!"
+      } else if (h <= 1) {
+        return Math.ceil(h) + " <span style='font-size: 16pt'>час</span>"
+      } else if (h <= 4) {
+        return Math.ceil(h) + " <span style='font-size: 16pt'>часа</span>"
+      } else { 
+        return Math.ceil(h) + " <span style='font-size: 16pt'>часов</span>"
+      }s
+    ]]]
+
+  # use gradient background based on conditions
   styles:
     card:
       - background: |
           [[[
-            return (variables.fed_time > variables.interval) 
-                    ? "radial-gradient(#77000099, #33000099)" 
-                    : "radial-gradient(#00440099, #00220099)" 
+            if (variables.fed_time > variables.hungry_interval) {
+              return "radial-gradient(#77000099, #33000099)"
+            }
+            else if (variables.door_time > variables.walk_interval) {
+              return "radial-gradient(#00006699, #00003399)"
+            }
+            else if (variables.fed_time < 1800) {
+              return "radial-gradient(#00440099, #00220099)"
+            }
+            else {
+              return "#00000099"
+            }
           ]]]
     icon: 
-      - width: 65%
+      - width: 52%
       - position: relative
-      - left: 1%
-      - top: 2%
+      - left: 0%
+      - top: -3%
 
     label:
       - font-size: 23pt

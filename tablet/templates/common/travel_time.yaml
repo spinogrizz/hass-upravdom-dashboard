@@ -38,10 +38,10 @@ travel_time:
       card:
         type: custom:button-card
         template: travel_time_unit
-        entity: sensor.travel_time_back_home
+        entity: sensor.from_mvl_back_home_time
         variables:
           entity_picture_size: 32px
-          opacity: 0.4
+          opacity: 0.5
           aux_icon: "↻"
 
 travel_time_unit:
@@ -87,7 +87,7 @@ travel_time_unit:
         - position: absolute
         - left: 16px
         - top: 2px
-        - color: white
+        - color: rgba(255, 255, 255, 0.5)
         - font-weight: 800
 
 
