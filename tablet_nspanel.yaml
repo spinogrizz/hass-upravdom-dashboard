@@ -1,0 +1,17 @@
+button_card_templates:
+  !include_dir_merge_named tablet/templates
+
+views:
+  - title: Home
+    type: custom:grid-layout
+    background: center / cover no-repeat fixed url('/local/tablet/wallpaper_nspanel.jpg')
+    layout:
+      grid-template-columns: 236px 236px
+      grid-template-rows: repeat(3, 158px)
+      grid-template-areas: |
+        "time_weather  time_weather"
+        "route         tesla"
+        "lights        none5"
+
+    cards:
+      !include_dir_merge_list tablet/cards/nspanel

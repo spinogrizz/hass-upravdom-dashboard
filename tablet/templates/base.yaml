@@ -1,7 +1,7 @@
 base:
   styles:
     card:
-      - border-radius: 16px
+      - border-radius: 14px
       - background-color: '#00000099'
       - border-width: 0
       - -webkit-backdrop-filter: blur(10px)
@@ -36,3 +36,13 @@ height-3rows:
   styles:
     card:
       - height: 262px
+
+nspanel-1row:
+  styles:
+    card:
+      - height: 148px
+
+nspanel-2rows:
+  styles:
+    card:
+      - height: 308px

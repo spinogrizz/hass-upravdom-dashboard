@@ -12,10 +12,10 @@ views:
         "light  main      main      none1    none1     todo    todo    todo    todo"
         "light  main      main      none1    none1     todo    todo    todo    todo"
         "light  main      main      none1    none1     todo    todo    todo    todo"
-        "light  weather   weather   none4    none4     todo    todo    todo    todo"
-        "light  weather   weather   none4    none4     todo    todo    todo    todo"
-        "light  route     none2     panda    panda     todo    todo    todo    todo"
-        "light  route     none2     panda    panda     todo    todo    todo    todo"
+        "light  weather   weather   route    route     todo    todo    todo    todo"
+        "light  weather   weather   route    route     todo    todo    todo    todo"
+        "light  none2     none4     none5    none5     todo    todo    todo    todo"
+        "light  none2     none4     none5    none5     todo    todo    todo    todo"
 
     card_mod:
       style: |
