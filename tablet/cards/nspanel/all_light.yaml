@@ -1,0 +1,112 @@
+# Карточка управления всем светом для NSPanel
+- type: custom:button-card
+  template:
+    - base
+    - nspanel-1row
+
+  view_layout:
+    grid-area: lights
+
+  entity: light.main_light_group
+
+  triggers_update:
+    - light.main_light_group
+
+  # Тап - выключаем группу если активна, иначе включаем сцену
+  tap_action: >
+    [[[
+      let isOn = entity && entity.state === 'on'
+      
+      if (isOn) {
+        // Выключаем группу
+        return {
+          action: 'call-service',
+          service: 'light.turn_off',
+          service_data: {
+            entity_id: 'light.main_light_group'
+          }
+        }
+      }
+      // Включаем сцену
+      return {
+        action: 'call-service',
+        service: 'scene.turn_on',
+        service_data: {
+          entity_id: 'scene.main_light_turn_on'
+        }
+      }
+    ]]]
+
+  show_icon: false
+  show_name: false
+  show_label: false
+  show_state: false
+
+  styles:
+    card:
+      - padding: 0px
+    grid:
+      - display: grid
+      - grid-template-areas: '"content"'
+      - grid-template-columns: 1fr
+      - width: 100%
+      - height: 100%
+    custom_fields:
+      content:
+        - grid-area: content
+        - display: flex
+        - align-items: center
+        - justify-content: center
+
+  custom_fields:
+    content: >
+      [[[
+        let members = []
+        
+        if (entity && entity.attributes && entity.attributes.entity_id) {
+          members = entity.attributes.entity_id
+        }
+        
+        // Проверяем состояние лампы по индексу
+        function isOn(idx) {
+          let lightId = members[idx]
+          return lightId && states[lightId] && states[lightId].state === 'on'
+        }
+        
+        // Генерируем кружок
+        function dot(idx, fake = false) {
+          let lightOn = fake ? false : isOn(idx)
+          let bgColor = lightOn ? '#FFD54F' : 'rgba(255,255,255,0.15)'
+          let boxShadow = lightOn ? '0 0 5px #FFD54F66' : 'none'
+          return `<div style="
+            width: 16px; 
+            height: 16px; 
+            border-radius: 50%; 
+            background: ${bgColor};
+            box-shadow: ${boxShadow};
+          "></div>`
+        }
+        
+        // Структура домика снизу вверх: [6, 6, 5, 3] ламп на этаж
+        const rowSizes = [6, 6, 5, 3]
+        
+        // Строим этажи с индексами
+        let idx = 0
+        let floors = rowSizes.map(size => {
+          let floor = Array.from({length: size}, (_, i) => idx + i)
+          idx += size
+          return floor
+        }).reverse()  // переворачиваем: верхний этаж первым
+        
+        let rows = floors.map(indices => `
+          <div style="display: flex; gap: 9px; justify-content: center;">
+            ${indices.map(i => dot(i)).join('')}
+          </div>
+        `).join('')
+        
+        return `
+          <div style="display: flex; flex-direction: column; gap: 7px; align-items: center;">
+            ${rows}
+          </div>
+        `
+      ]]]

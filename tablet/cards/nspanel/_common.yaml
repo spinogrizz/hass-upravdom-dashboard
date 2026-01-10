@@ -1,0 +1,8 @@
+# travel time
+# - type: custom:button-card
+#   template: 
+#    - travel_time
+#    - nspanel-1row
+  
+#   view_layout:
+#     grid-area: route
