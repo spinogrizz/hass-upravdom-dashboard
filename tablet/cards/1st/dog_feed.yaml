@@ -36,11 +36,22 @@
         return now - door
       ]]]
 
+    # calculate time dog is outside in minutes
+    outside_time: |
+      [[[
+        let outsideTime = new Date(states['input_datetime.dog_come_outside_time'].state).getTime()/1000
+        let now = new Date().getTime()/1000
+        return Math.floor((now - outsideTime) / 60)
+      ]]]
+
   # show appropriate icon for a feeding state
   entity_picture: |
     [[[
       let state = "happy";
-      if (variables.fed_time > variables.hungry_interval) {
+      if (states['input_boolean.dog_outside'].state === 'on') {
+        state = "walk";
+      }
+      else if (variables.fed_time > variables.hungry_interval) {
         state = "cry";
       }
       else if (variables.door_time > variables.walk_interval) {
@@ -64,7 +75,15 @@
       let doorTime = doorDate.getHours().toString().padStart(2, '0') + ':' + 
                     doorDate.getMinutes().toString().padStart(2, '0')
 
-      if (variables.fed_time > variables.hungry_interval) {
+      if (states['input_boolean.dog_outside'].state === 'on') {
+        let minutes = variables.outside_time
+        if (minutes === 0) {
+          return "<span style='font-size: 18pt'>Вышла</span>"
+        } else {
+          return minutes + " <span style='font-size: 16pt'>мин</span>"
+        }
+      }
+      else if (variables.fed_time > variables.hungry_interval) {
         return Math.ceil(h) + " <span style='font-size: 16pt'>часов</span>"
       }
       else if (variables.door_time > variables.walk_interval) {
@@ -78,7 +97,7 @@
         return Math.ceil(h) + " <span style='font-size: 16pt'>часа</span>"
       } else { 
         return Math.ceil(h) + " <span style='font-size: 16pt'>часов</span>"
-      }s
+      }
     ]]]
 
   # use gradient background based on conditions
@@ -86,7 +105,10 @@
     card:
       - background: |
           [[[
-            if (variables.fed_time > variables.hungry_interval) {
+            if (states['input_boolean.dog_outside'].state === 'on') {
+              return "radial-gradient(#00336699, #00112299)"
+            }
+            else if (variables.fed_time > variables.hungry_interval) {
               return "radial-gradient(#77000099, #33000099)"
             }
             else if (variables.door_time > variables.walk_interval) {
@@ -100,10 +122,13 @@
             }
           ]]]
     icon: 
-      - width: 52%
+      - width: |
+          [[[
+            return states['input_boolean.dog_outside'].state === 'on' ? "60%" : "50%"
+          ]]]
       - position: relative
       - left: 0%
-      - top: -3%
+      - top: -2%
 
     label:
       - font-size: 23pt
