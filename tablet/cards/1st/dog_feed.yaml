@@ -28,12 +28,12 @@
         return now - fed
       ]]]
 
-    # calculate time since last door opening
-    door_time: |
+    # timestamp of last walk event (outside or inside) in seconds
+    last_walk_event: |
       [[[
-        let door = new Date(states['binary_sensor.backyard_door'].last_changed).getTime()/1000
-        let now = new Date().getTime()/1000
-        return now - door
+        let outsideTime = new Date(states['input_datetime.dog_come_outside_time'].state).getTime()/1000
+        let insideTime = new Date(states['input_datetime.dog_come_inside_time'].state).getTime()/1000
+        return Math.max(outsideTime, insideTime)
       ]]]
 
     # calculate time dog is outside in minutes
@@ -54,7 +54,7 @@
       else if (variables.fed_time > variables.hungry_interval) {
         state = "cry";
       }
-      else if (variables.door_time > variables.walk_interval) {
+      else if ((new Date().getTime()/1000 - variables.last_walk_event) > variables.walk_interval) {
         state = "sad";
       }
       else if (variables.fed_time < 1800) {
@@ -71,7 +71,8 @@
       const fake_time = states['sensor.every_1m']
 
       let h = Math.ceil((variables.fed_time / 3600) * 10) / 10
-      let doorDate = new Date(states['binary_sensor.backyard_door'].last_changed)
+      let now = new Date().getTime()/1000
+      let doorDate = new Date(variables.last_walk_event * 1000)
       let doorTime = doorDate.getHours().toString().padStart(2, '0') + ':' + 
                     doorDate.getMinutes().toString().padStart(2, '0')
 
@@ -86,7 +87,7 @@
       else if (variables.fed_time > variables.hungry_interval) {
         return Math.ceil(h) + " <span style='font-size: 16pt'>часов</span>"
       }
-      else if (variables.door_time > variables.walk_interval) {
+      else if ((now - variables.last_walk_event) > variables.walk_interval) {
         return "🚪 " + doorTime + "&nbsp"
       }
       else if (h <= 0.5) {
@@ -105,13 +106,14 @@
     card:
       - background: |
           [[[
+            let now = new Date().getTime()/1000
             if (states['input_boolean.dog_outside'].state === 'on') {
               return "radial-gradient(#00336699, #00112299)"
             }
             else if (variables.fed_time > variables.hungry_interval) {
               return "radial-gradient(#77000099, #33000099)"
             }
-            else if (variables.door_time > variables.walk_interval) {
+            else if ((now - variables.last_walk_event) > variables.walk_interval) {
               return "radial-gradient(#00006699, #00003399)"
             }
             else if (variables.fed_time < 1800) {
@@ -124,7 +126,7 @@
     icon: 
       - width: |
           [[[
-            return states['input_boolean.dog_outside'].state === 'on' ? "60%" : "50%"
+            return states['input_boolean.dog_outside'].state === 'on' ? "58%" : "52%"
           ]]]
       - position: relative
       - left: 0%
