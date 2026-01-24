@@ -1,0 +1,35 @@
+type: custom:button-card
+
+show_icon: false
+show_name: false
+show_label: false
+show_state: false
+
+# использовать entity picture для отображения камеры
+show_entity_picture: true
+entity_picture: >
+  [[[
+    // Добавляем timestamp чтобы изображение обновлялось
+    const fake_time = states['sensor.every_2s']
+    return "https://cameras.gryzlov.com/homeassistant/camera/door/medium?crop=700,1250,1000,1000&rotate=30&ts=" + Date.now()
+  ]]]
+
+styles:
+  card:
+    - padding: 0px
+    - margin: 0px
+    - width: 480px
+    - height: 480px
+    - top: -8px
+    - left: -8px
+    - background: none
+    - position: absolute
+    - border-radius: 0px
+    - border: none
+    - box-shadow: none
+  
+  entity_picture:
+    - width: 100%
+    - height: 100%
+    - object-fit: cover
+    - border-radius: 0px

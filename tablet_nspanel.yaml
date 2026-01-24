@@ -3,15 +3,29 @@ button_card_templates:
 
 views:
   - title: Home
-    type: custom:grid-layout
     background: center / cover no-repeat fixed url('/local/tablet/wallpaper_nspanel.jpg')
-    layout:
-      grid-template-columns: 236px 236px
-      grid-template-rows: repeat(3, 158px)
-      grid-template-areas: |
-        "time_weather  time_weather"
-        "route         tesla"
-        "lights        none5"
-
     cards:
-      !include_dir_merge_list tablet/cards/nspanel
+      # Обычное состояние - все виджеты
+      - type: conditional
+        conditions:
+          - entity: input_boolean.doorbell_on_dashboard
+            state: 'off'
+        card:
+          type: custom:layout-card
+          layout_type: custom:grid-layout
+          layout:
+            grid-template-columns: 236px 236px
+            grid-template-rows: repeat(3, 158px)
+            grid-template-areas: |
+              "time_weather  time_weather"
+              "route         tesla"
+              "lights        none5"
+          cards:
+            !include_dir_merge_list tablet/cards/nspanel
+
+      # Состояние звонка в дверь - камера на весь экран
+      - type: conditional
+        conditions:
+          - entity: input_boolean.doorbell_on_dashboard
+            state: 'on'
+        card: !include tablet/cards/nspanel/doorbell.yaml
