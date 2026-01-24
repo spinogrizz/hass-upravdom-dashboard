@@ -13,11 +13,6 @@
   show_label: true
   show_name: false
 
-  triggers_update: 
-    - binary_sensor.aqara_fp1_living_room_presence
-    - binary_sensor.tuya_living_room_motion_zaniatost
-    - binary_sensor.backyard_door
-
   variables:
     # show 'dog is hungry' state when feed time exceeds 5 hours
     hungry_interval: 18000 
@@ -61,6 +56,9 @@
   # show appropriate label based on conditions
   label: |
     [[[
+      // There is no triggers_update, so we need to fake the time elapsing
+      const fake_time = states['sensor.every_1m']
+
       let h = Math.ceil((variables.fed_time / 3600) * 10) / 10
       let doorDate = new Date(states['binary_sensor.backyard_door'].last_changed)
       let doorTime = doorDate.getHours().toString().padStart(2, '0') + ':' + 

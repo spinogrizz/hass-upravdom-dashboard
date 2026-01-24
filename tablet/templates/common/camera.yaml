@@ -25,16 +25,14 @@ camera:
   # use entity picture as a camera feed view
   show_entity_picture: true
 
-  # dummy template time_trigger sensors allows to refresh entity_picture every second
-  # don't forget to remove them from recorder to prevent database bloat
-  triggers_update: 
-    - sensor.every_2s
-    - input_text.last_camera_detected_motion
-
   # automation is used to store last camera name that triggered motion 
   # to the input_text variable, that we use as camera-id for proxy
   entity_picture: >
       [[[
+        // There is no triggers_update, so we need to fake the time elapsing
+        const fake_time = states['sensor.every_5s']
+        const fake_motion = states['input_text.last_camera_detected_motion']
+        
         let camera_id = states['input_text.last_camera_detected_motion'].state || 'door'
         return "http://10.42.20.1:9091/homeassistant/camera/" + camera_id + "/medium"
                + "?ts=" + Date.now()
