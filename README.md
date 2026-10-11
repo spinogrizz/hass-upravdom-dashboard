@@ -4,6 +4,16 @@ A set of working, YAML-based Home Assistant dashboards built for two Amazon Fire
 
 This is the dashboard layer of one real home, shared as reference code rather than a ready-to-install theme. The entity IDs, automations, camera endpoints, artwork, and screen dimensions reflect that home. You can reuse the patterns while replacing those details with your own.
 
+## Screenshots
+
+**Tablet 1st on Amazon Fire HD Plus**
+
+![First-floor tablet dashboard showing temperatures, cameras, vehicles, weather, lights, and media controls](pictures/screenshots/tablet_1st.png)
+
+**Sonoff NSPanel**
+
+<img src="pictures/screenshots/nspanel.png" alt="Sonoff NSPanel dashboard showing weather, vehicles, lights, and travel time" width="480">
+
 ## What is here
 
 | Path | Purpose |
