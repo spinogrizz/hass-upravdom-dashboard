@@ -1,4 +1,5 @@
-# tesla + haval (see templates/common/cars.yaml)
+# The parent template stacks both cars and keeps their independent actions
+# inside one grid slot, avoiding duplicate layout definitions on each floor.
 - type: custom:button-card
   template: cars
 

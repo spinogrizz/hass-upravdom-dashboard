@@ -1,4 +1,5 @@
-# Колонка с выключателями света
+# The narrow light column uses the same light template for each room; only
+# rooms with occupancy context add their own visual state.
 - type: vertical-stack
   view_layout:
     grid-area: light
@@ -41,7 +42,8 @@
       
       styles:
         card:
-          # show red background if bathroom is occupied
+          # Show occupancy only when the light is on, avoiding an alarming
+          # highlight from motion alone in a dark bathroom.
           - background: >
               [[[
                   let occupancy = states['binary_sensor.aqara_retro_bathroom_motion_zaniatost']

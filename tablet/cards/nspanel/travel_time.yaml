@@ -1,3 +1,5 @@
+# Both directions fit in one NSPanel cell. An extra 20% turns route estimates
+# into a more realistic door-to-door time, matching the tablet route template.
 - type: custom:button-card
   template:
     - base
@@ -7,6 +9,8 @@
     grid-area: route
 
   entity: sensor.travel_time_kindergarden
+  # Re-render when the return trip changes too; the card's primary entity
+  # only covers the outbound route.
   triggers_update:
     - sensor.every_1m
     - sensor.from_mvl_back_home_time
@@ -37,15 +41,13 @@
   custom_fields:
     content: >
       [[[
-        // Время туда
+        // The outbound trip drives the traffic-light urgency indicator.
         let thereTime = entity ? parseInt(entity.state*1.2) : 0
         
-        // Время обратно
         let backTime = states['sensor.from_mvl_back_home_time'] 
           ? parseInt(states['sensor.from_mvl_back_home_time'].state*1.2)
           : 0
         
-        // Светофор для времени туда
         let trafficIcon = ''
         if (thereTime <= 20) {
           trafficIcon = '/local/tablet/icons/traffic_green.png'

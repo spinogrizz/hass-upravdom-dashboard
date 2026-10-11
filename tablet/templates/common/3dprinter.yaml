@@ -1,3 +1,5 @@
+# Printer-specific templates provide status and time; this common template
+# turns those values into the same progress layout for any printer model.
 3dprinter:
 
   show_name: false
@@ -10,6 +12,8 @@
     -  height-2rows
 
   custom_fields:
+    # Empty custom fields become CSS-drawn bars, avoiding an extra graph card
+    # and keeping the printer tile the same size as its neighbors.
     progress_bar: ""
     progress_full: ""
     progress_time: >
@@ -57,6 +61,8 @@
         - left: 10%
         - bottom: 15%
 
+      # The foreground width is a percentage of the configured track width.
+      # The faint full track provides context when a print is in progress.
       progress_bar:
         - position: absolute
         - bottom: 10%

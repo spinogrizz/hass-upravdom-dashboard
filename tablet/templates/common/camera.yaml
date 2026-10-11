@@ -1,14 +1,17 @@
+# A shared camera tile can follow motion or pin one camera on the second
+# floor. The image URL is served by simple-camproxy, outside Home Assistant.
 camera:
   template:
     - base
     - height-3rows
 
   variables:
-    # fixed camera id (e.g. 'veranda'); if not set, show the last camera
-    # that detected motion (override tap_action with 'none' for fixed ones)
+    # A fixed ID pins the tile; otherwise the helper tracks the last camera
+    # that saw motion. Fixed instances disable the cycling tap action.
     camera: null
 
-  # tap to switch between cameras
+  # Manual cycling writes to the same helper used by motion automation, so
+  # the camera tile has one source of truth for automatic and manual changes.
   tap_action:
     action: call-service
     service: input_text.set_value
@@ -27,14 +30,15 @@ camera:
           return cameras[idx]
         ]]]
 
-  # use entity picture as a camera feed view
+  # button-card displays the proxy snapshot through entity_picture.
   show_entity_picture: true
 
-  # automation is used to store last camera name that triggered motion 
-  # to the input_text variable, that we use as camera-id for proxy
+  # Reading the periodic sensor makes button-card reevaluate this template.
+  # The timestamp then bypasses image caching, yielding a refreshed snapshot
+  # even while the selected camera ID stays the same.
   entity_picture: >
       [[[
-        // There is no triggers_update, so we need to fake the time elapsing
+        // The periodic sensor is a redraw dependency, not a displayed value.
         const fake_time = states['sensor.every_5s']
         const fake_motion = states['input_text.last_camera_detected_motion']
         

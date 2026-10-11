@@ -1,3 +1,5 @@
+# Adapt Bambu's native status names and sensors to the generic 3dprinter
+# template so the visual card does not need to know this printer model.
 bambu:
   template: 3dprinter
 

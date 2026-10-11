@@ -1,3 +1,5 @@
+# Combine clock and forecast in one row to preserve space on the NSPanel.
+# The weather sensor provides a current slot and a later (~6-hour) slot.
 - type: custom:button-card
   template:
     - base
@@ -51,7 +53,8 @@
   custom_fields:
     time: >
       [[[
-        // There is no triggers_update, so we need to fake the time elapsing
+        // Time has no HA entity state of its own here; the periodic sensor
+        // makes button-card recalculate the clock while the page stays open.
         const fake_time = states['sensor.every_5s']
 
         let now = new Date()
@@ -66,17 +69,17 @@
 
     weather: >
       [[[
-        // Форматирование температуры с математическим минусом
+        // Keep the typographic minus consistent with other dashboard values.
         const formatTemp = (t) => t < 0 ? '−' + Math.abs(t) : t
         
-        // Текущая погода
+        // The large value answers 'what is it like now?' at a glance.
         let condition = entity.attributes['now_cond']
         let temp = parseInt(entity.attributes['now_temp'])
         
-        // Прогноз примерно через 6 часов (forecast[6])
+        // A smaller later value gives short-term context without another card.
         let laterTemp = parseInt(entity.attributes['later_temp'])
         
-        // Определение иконки
+        // Distinguish night clouds from daytime partly cloudy weather.
         let time = new Date(entity.attributes['now_date'])
         let hours = time.getHours()
         

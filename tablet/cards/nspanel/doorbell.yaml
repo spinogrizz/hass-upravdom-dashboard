@@ -1,3 +1,5 @@
+# This card is mounted only while the doorbell helper is on. It fills the
+# panel so the visitor image is visible without opening another HA view.
 type: custom:button-card
 
 show_icon: false
@@ -5,11 +7,12 @@ show_name: false
 show_label: false
 show_state: false
 
-# использовать entity picture для отображения камеры
+# The periodic sensor redraws the card, and the URL timestamp bypasses image
+# caching so the proxy snapshot advances during a long doorbell event.
 show_entity_picture: true
 entity_picture: >
   [[[
-    // Добавляем timestamp чтобы изображение обновлялось
+    // The sensor is a redraw dependency; it is not displayed.
     const fake_time = states['sensor.every_5s']
     return "https://cameras.gryzlov.com/homeassistant/camera/doorbell/high?crop=500,1000,900,900&ts=" + Date.now()
   ]]]

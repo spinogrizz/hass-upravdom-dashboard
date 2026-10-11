@@ -1,4 +1,5 @@
-# both cars (tesla + haval) stacked in one 2-column, 3-row block
+# Nest both cars in one button-card so the dashboard grid treats them as a
+# single block while each car keeps its own action and data source.
 cars:
   styles:
     grid:
@@ -58,6 +59,8 @@ cars:
         variables:
           name: jolion
           present: true
+          # Adapt the Haval sensor state to the shared card's fuel input here;
+          # the template should not need to know the source entity's ID.
           fuel: >
             [[[
               const fuel = states['sensor.dzholion_zapas_khoda_na_benzine']?.state;

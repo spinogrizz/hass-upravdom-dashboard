@@ -1,3 +1,6 @@
+# Shared car presentation accepts battery percentage or fuel range. Each
+# integration supplies different entities, but the view needs one visual
+# language; normalize those entities before passing data into this template.
 car:
   template:
     - base
@@ -5,6 +8,9 @@ car:
 
   show_label: true
 
+  # Home Assistant sensor states arrive as strings, including nonnumeric
+  # states. Validate before formatting so the same template works through
+  # normal readings and temporary integration outages.
   label: >
     [[[ 
       const rawCharge = variables.charge
@@ -49,6 +55,8 @@ car:
                  + ".png?xxxxxx')"
           ]]]
 
+    # Threshold colors are applied only to valid readings; unknown values
+    # stay neutral instead of being mistaken for an empty battery or tank.
     label:
       - position: absolute
       - top: 16px

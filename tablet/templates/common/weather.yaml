@@ -1,3 +1,5 @@
+# Three nested weather_unit cards share rendering logic while receiving
+# different forecast keys from sensor.weather_forecast_extra.
 weather:
   template: 
     - base
@@ -12,10 +14,10 @@ weather:
       - padding: 0px
       - margin: 0px  
 
-  # Weather cards shows three units — now, later, after
-  # now — current weather
-  # later — ~6 hours from now
-  # after — ~12 hours from now
+  # The grid fixes three equal columns so forecasts do not shift neighbors.
+  # The sensor's historical names are counterintuitive: 'after' is forecast
+  # index 3, while 'later' is index 6. Keep that mapping here so the visible
+  # order remains now, nearer forecast, farther forecast.
   custom_fields:
     now: 
       card:

@@ -1,3 +1,5 @@
+# This tile has three useful views: active play time, today's total, and time
+# since the last session. Tapping only changes the dashboard view helper.
 - type: custom:button-card
   entity: input_boolean.vika_steam_session_active
 
@@ -35,6 +37,8 @@
         if (variables.stop_ms === null) return 0
         return Math.max(0, (Date.now() - variables.stop_ms) / 1000)
       ]]]
+    # Calendar-day distance chooses 'yesterday' and day wording, while raw
+    # elapsed seconds are used for precise durations within the current day.
     day_diff: |
       [[[
         if (variables.stop_ms === null) return 0
@@ -53,6 +57,8 @@
       return '/local/tablet/icons/vika_sad.png'
     ]]]
 
+  # The minute sensor is a redraw dependency: elapsed time changes even when
+  # none of the gaming entities changes state.
   label: |
     [[[
       const fake = states['sensor.every_1m']
@@ -105,21 +111,21 @@
         return `${hrs} ${unit('ч')} ${mins} ${unit('м')}`
       }
 
-      // gaming: сколько длится текущая сессия
+      // Live sessions take priority over the dashboard's idle-mode toggle.
       if (entity.state === 'on') {
         const sessionSeconds = toSecondsFromNow('input_datetime.vika_playtime_start')
         const sessionHours = sessionSeconds / 3600
         return formatTimeDetail(sessionHours)
       }
 
-      // режим 1: суммарно за сегодня
+      // The alternate view answers how much time was spent gaming today.
       if (variables.dashboard_mode) {
         const total = parseFloat(states['sensor.steam_w0bblink_gaming_today']?.state) || 0
         if (total < 0.02) return `0 ${unit('мин')}`
         return formatTimeDetail(total)
       }
 
-      // режим 2: сколько уже не играет
+      // Idle view makes a missed or long-ago session legible at a glance.
       if (variables.stop_ms === null) return `0 ${unit('мин')}`
       if (variables.day_diff === 0) return formatDurationShort(variables.idle_seconds)
       if (variables.day_diff === 1) return 'Вчера'

@@ -1,3 +1,6 @@
+# This one card overlays floor temperatures, heating modes, presence, and
+# water hints on a static house image so their positions share one coordinate
+# system. Both tablet floors reuse it.
 main:
   template: 
     - base
@@ -8,7 +11,9 @@ main:
   show_label: true
 
   variables: 
-    # глобальная функция для генерации span-элементов с температурой
+    # Keep the temperature markup and mode priority in one place: cooling
+    # takes precedence over radiators, then underfloor heating. CSS below
+    # turns those modes into a quick visual status for each floor.
     _unit_function: >
       [[[
         return function (is_ac_on, is_heat_on, is_floor_on, temp) {
@@ -16,6 +21,9 @@ main:
           return "<span class='" + style + "'>" + (Math.round(temp) || '--') + "°</span>"
         }
       ]]]
+    # Presence sensors can report transient or unknown states. Treat only
+    # known floors and 'out' as visible so a stale dot cannot imply someone
+    # is in a room when their location is uncertain.
     _is_floor_visible: >
       [[[
         return function (floor) {
@@ -28,6 +36,8 @@ main:
           return variables._is_floor_visible(floor) || floor === 'out'
         }
       ]]]
+    # The house artwork has evenly spaced floors. Use one mapping for both
+    # people, and move unknown locations off-card instead of guessing.
     _floor_top: >
       [[[
         return function (floor) {
@@ -43,6 +53,8 @@ main:
           return '-100px'
         }
       ]]]
+    # Separate two dots when both people are on the same floor or outside;
+    # otherwise they would overlap and look like one person.
     _occupy_left: >
       [[[
         return function (floor, otherFloor, is_second_person) {
@@ -60,7 +72,7 @@ main:
         }
       ]]]
 
-  # use custom fields to display presence dots
+  # Custom fields let button-card position live data over the background art.
   custom_fields:
     occupy_denis: >
       [[[
@@ -108,6 +120,8 @@ main:
         return variables._unit_function(is_ac_on, is_heat_on, is_floor_on, temp)
       ]]]
 
+    # The floor hint is a comma-separated state such as '2nd,3rd'. Check
+    # membership rather than equality so simultaneous use lights both drops.
     water_2nd: >
       [[[
         return states['sensor.water_use_floor']?.state?.split(',').includes('2nd')
@@ -195,10 +209,9 @@ main:
         - pointer-events: none
 
 
-  # use different styles for a different states:
-  # red underline - infloor heating only
-  # red background — radiator heating active
-  # blue — air conditioning is on
+  # card_mod styles the HTML returned by _unit_function: blue for cooling,
+  # solid red for radiator heat, and a red underline for underfloor heat.
+  # The distinction keeps three systems legible in the same small number.
   card_mod:
     style: |
       .cold, .hot, .floor, .none {

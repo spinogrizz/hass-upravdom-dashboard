@@ -1,3 +1,5 @@
+# Optional finance tile: the compact order squares show buy/sell balance
+# without adding a table to the fixed dashboard grid.
 forex:
   template: 
     - base
@@ -32,6 +34,8 @@ forex:
           return "+ $" + attrs.open_pl
         }
       ]]]
+    # Wrap after four positions so a changing order count cannot stretch the
+    # tile wider than its allocated grid area.
     orders: |
       [[[
           let attrs = states['sensor.eve_roboforex'].attributes

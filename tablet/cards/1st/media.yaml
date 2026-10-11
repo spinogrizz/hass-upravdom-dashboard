@@ -1,3 +1,5 @@
+# Samsung Frame exposes art mode separately from its media source. Map both
+# into one UI mode so the label and background describe what the room sees.
 - type: custom:button-card
   entity: media_player.samsung_frame
   template: 
@@ -7,12 +9,12 @@
     action: call-service
     service: script.toggle_samsung_frame
 
+  # The selected preset is stored in a helper, so changes there must redraw
+  # this tile even if the TV entity itself has not reported a new state.
   triggers_update:
     - media_player.samsung_frame
     - input_text.media_latest_scene
 
-  # Detect current source/mode 
-  # art_mode=on means TV is off (Samsung Frame)
   variables: 
     mode: >
       [[[
@@ -33,7 +35,6 @@
   view_layout:
     grid-area: tv
 
-  # Display current state and input
   label: >
     [[[
       switch ( variables.mode ) {
@@ -43,7 +44,6 @@
       }
     ]]]
 
-  # Display different background for a card depending on a state
   styles:
     card:
       - background-image: >
@@ -52,7 +52,7 @@
           ]]]
 
 
-# AV Receiver
+# The receiver has its own power/source state, which need not match the TV.
 - type: custom:button-card
   entity: media_player.marantz_nr1508
   template: 
@@ -78,7 +78,8 @@
       return entity.attributes.source
     ]]]
 
-# Buttons to switch scenes and modes of both TV and receiver
+# These buttons call one script that coordinates the TV and receiver; a
+# source change cannot be represented by toggling either device alone.
 - type: horizontal-stack
   view_layout:
     grid-area: avcon
@@ -110,7 +111,8 @@
           variables:
             input: Vinyl
 
-# Receiver volume
+# Embed the receiver volume control inside a button-card so it can occupy
+# the same dashboard grid and share the same visual style.
 - type: custom:button-card
   template:
     - base
@@ -144,7 +146,7 @@
         icon: 
           show: false
 
-        # These hacks allows more accurate embedding of slider-card inside button-card
+        # Style the nested slider without changing the enclosing button card.
         card_mod:
           style: |
             :host {
@@ -174,9 +176,8 @@
       - pointer-events: none
       - user-select: none
 
-    # Make slider card larger than enclosing card, 
-    # so volume values will change between ~0.2–0.6 instead of default unreasonable 0.0-1.0 interval
-    # slider-button-card doesn't allow clamping to custom min/max values
+    # slider-button-card has no custom min/max clamp. Oversizing it clips the
+    # usable part to roughly 20–60%, the receiver's practical volume range.
     custom_fields:
       slider:
         - position: absolute

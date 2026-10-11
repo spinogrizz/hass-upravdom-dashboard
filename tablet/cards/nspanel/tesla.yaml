@@ -1,4 +1,5 @@
-# Карточка Tesla для NSPanel
+# This compact tile combines a charge sensor with climate and defrost actions.
+# custom_fields overlays the car art and data within one NSPanel grid cell.
 - type: custom:button-card
   template:
     - base
@@ -9,7 +10,8 @@
 
   entity: sensor.spacex_battery_level
 
-  # Тап - включаем климат или выключаем всё если уже греется
+  # Tap acts as a single cabin-preheat toggle across the climate and defrost
+  # entities. If either is already heating, stop both to avoid a half-on car.
   tap_action: >
     [[[
       let defrostOn = states['switch.spacex_defrost']?.state === 'on'
@@ -17,7 +19,6 @@
       let isHeating = climateState === 'heat_cool' || climateState === 'heating' || climateState === 'heat'
       
       if (defrostOn || isHeating) {
-        // Выключаем оба
         return {
           action: 'call-service',
           service: 'homeassistant.turn_off',
@@ -26,7 +27,6 @@
           }
         }
       }
-      // Включаем климат
       return {
         action: 'call-service',
         service: 'climate.set_hvac_mode',
@@ -37,7 +37,7 @@
       }
     ]]]
 
-  # Удержание - включаем обогрев стёкол
+  # Hold gives quick access to defrost without changing the tap behavior.
   hold_action:
     action: call-service
     service: switch.turn_on
@@ -55,16 +55,15 @@
       - overflow: hidden
       - background: >
           [[[
-            // Проверяем активен ли прогрев
+            // Match the active highlight to the same two heating entities
+            // used by the tap action, so the visual cue agrees with control.
             let defrostOn = states['switch.spacex_defrost']?.state === 'on'
             let climateState = states['climate.spacex_climate']?.state
             let isHeating = climateState === 'heat_cool' || climateState === 'heating' || climateState === 'heat'
             
-            // Базовый фон из base template
             let baseBg = '#00000099'
             
             if (defrostOn || isHeating) {
-              // Размытый красный бордер поверх базового фона
               return `radial-gradient(ellipse at center, #22000099 40%, #55111199 75%, #88222299 100%)`
             }
             return baseBg
@@ -112,25 +111,23 @@
 
     content: >
       [[[
-        // Уровень заряда
+        // Guard against unavailable/empty HA states before numeric coercion.
         const rawCharge = entity?.state
         const charge = Number(rawCharge)
         const hasCharge = rawCharge !== undefined && rawCharge !== null && String(rawCharge).trim() !== '' &&
           Number.isFinite(charge) && charge >= 0 && charge <= 100
         
-        // Статус зарядки
         let chargingState = states['sensor.spacex_charging']
         let isCharging = chargingState && chargingState.state === 'charging'
         
-        // Цвет в зависимости от уровня заряда
+        // Only a valid percentage can trigger a low-charge color.
         let chargeColor = '#FFFFFF'
         if (hasCharge && charge < 30) {
-          chargeColor = '#CF4141'  // красный
+          chargeColor = '#CF4141'
         } else if (hasCharge && charge < 65) {
-          chargeColor = '#D5C539'  // желтый
+          chargeColor = '#D5C539'
         }
         
-        // Иконка зарядки
         let chargingIcon = isCharging 
           ? '<div style="margin-top: 6px;"><ha-icon icon="mdi:lightning-bolt" style="width: 32px; height: 32px; color: #67C743;"></ha-icon></div>'
           : ''

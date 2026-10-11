@@ -1,3 +1,5 @@
+# Two routes share one tile, with a primary outbound estimate and a quieter
+# return estimate. Traffic color is based on the outbound sensor state.
 travel_time:
   entity: sensor.travel_time_kindergarden
   triggers_update:
@@ -62,7 +64,6 @@ travel_time_unit:
       - height: 50px
       - opacity: "[[[ return variables.opacity ]]]"
 
-    # значок светофора
     entity_picture:
       - width: >
           [[[
@@ -71,7 +72,6 @@ travel_time_unit:
       - display: block
       - margin-left: 65px
 
-    # сам текст с минутами
     label:
       - font-size: 21pt
       - position: relative
@@ -91,7 +91,7 @@ travel_time_unit:
         - font-weight: 800
 
 
-  # Show green/yellow/red traffic light depending on a travel time
+  # The color thresholds make route delays visible before reading the number.
   state:
     - id: green
       operator: '<'
@@ -108,6 +108,8 @@ travel_time_unit:
       value: 999
       entity_picture: '/local/tablet/icons/traffic_red.png'
 
+  # Allow extra time over the route API estimate for a realistic door-to-door
+  # figure; the NSPanel route card applies the same multiplier.
   label: >
     [[[
       return entity ? parseInt(entity.state*1.2)

@@ -1,4 +1,5 @@
-# dog feed / walk status (see templates/common/dog_feed.yaml)
+# The dog template owns both the display priority and correction tap action;
+# this instance only places it on the first-floor grid.
 - type: custom:button-card
   template: dog_feed
 

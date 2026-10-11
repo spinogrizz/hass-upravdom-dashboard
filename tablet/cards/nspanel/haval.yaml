@@ -1,4 +1,5 @@
-# Карточка Haval Jolion для NSPanel
+# On the small panel the Haval sensor supplies range while a switch controls
+# the tap action. One button-card can combine data and control entities.
 - type: custom:button-card
   template:
     - base
@@ -9,7 +10,6 @@
 
   entity: switch.dzholion
 
-  # Тап - завод/глушим машину
   tap_action:
     action: toggle
     entity_id: switch.dzholion
@@ -64,6 +64,8 @@
         "></div>`
       ]]]
 
+    # Coerce the numeric sensor state once, then use it for both the displayed
+    # distance and its color; this keeps thresholds and text in agreement.
     content: >
       [[[
         const rangeRaw = states['sensor.dzholion_zapas_khoda_na_benzine']?.state

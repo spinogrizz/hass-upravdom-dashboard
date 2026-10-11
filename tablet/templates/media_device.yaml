@@ -1,3 +1,5 @@
+# TV and receiver share the same on/off presentation, while each card can
+# override its action and background according to device-specific behavior.
 media_device:
   template:
   - base

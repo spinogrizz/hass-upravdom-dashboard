@@ -1,3 +1,5 @@
+# One shared on/off treatment makes the narrow room-light columns scannable;
+# individual rooms add motion cues only where that context is useful.
 light:
   template:
     - base

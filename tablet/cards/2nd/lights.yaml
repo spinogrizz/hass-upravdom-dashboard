@@ -1,4 +1,5 @@
-# Колонка с выключателями света
+# Reuse the common light template; room-specific motion adds context where
+# occupancy matters without creating a separate dashboard tile.
 - type: vertical-stack
   view_layout:
     grid-area: light
@@ -55,7 +56,8 @@
                   }
               ]]]  
 
-      # unicorn dances when there is a motion in the room
+      # Motion animates the child's room icon so occupancy is visible even
+      # when the light's on/off color has not changed.
       extra_styles: |
           @keyframes bounce {
             0%, 20%, 50%, 80%, 100% { transform: translateY(0) scale(-1, 1); }
@@ -87,7 +89,8 @@
       
       styles:
         card:
-          # show red background if bathroom is occupied
+          # Motion and a lit bathroom together suggest current use; motion
+          # alone would make the tile appear occupied in the dark.
           - background: >
               [[[
                   let occupancy = states['binary_sensor.aqara_mario_bathroom_motion_zaniatost']

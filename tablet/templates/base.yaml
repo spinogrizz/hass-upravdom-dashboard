@@ -1,3 +1,5 @@
+# Shared visual defaults and row heights keep all three dashboards aligned.
+# Individual cards compose these templates, then override only what they need.
 base:
   styles:
     card:

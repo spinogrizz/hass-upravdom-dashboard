@@ -1,4 +1,6 @@
-# Карточка управления всем светом для NSPanel
+# The whole-house light group provides the aggregate state and member list.
+# A scene is used to turn lights on so their preferred brightness/colors are
+# restored; turning the group off still affects every member.
 - type: custom:button-card
   template:
     - base
@@ -12,13 +14,11 @@
   triggers_update:
     - light.main_light_group
 
-  # Тап - выключаем группу если активна, иначе включаем сцену
   tap_action: >
     [[[
       let isOn = entity && entity.state === 'on'
       
       if (isOn) {
-        // Выключаем группу
         return {
           action: 'call-service',
           service: 'light.turn_off',
@@ -27,7 +27,6 @@
           }
         }
       }
-      // Включаем сцену
       return {
         action: 'call-service',
         service: 'scene.turn_on',
@@ -67,13 +66,13 @@
           members = entity.attributes.entity_id
         }
         
-        // Проверяем состояние лампы по индексу
+        // This visual map assumes the group's member order matches the
+        // physical light order. Update rowSizes if group membership changes.
         function isOn(idx) {
           let lightId = members[idx]
           return lightId && states[lightId] && states[lightId].state === 'on'
         }
         
-        // Генерируем кружок
         function dot(idx, fake = false) {
           let lightOn = fake ? false : isOn(idx)
           let bgColor = lightOn ? '#FFD54F' : 'rgba(255,255,255,0.15)'
@@ -87,16 +86,16 @@
           "></div>`
         }
         
-        // Структура домика снизу вверх: [6, 6, 5, 3] ламп на этаж
+        // Row sizes mirror the house from bottom to top; the visual stack
+        // reverses them so the upper floor appears at the top of the panel.
         const rowSizes = [6, 6, 5, 3]
         
-        // Строим этажи с индексами
         let idx = 0
         let floors = rowSizes.map(size => {
           let floor = Array.from({length: size}, (_, i) => idx + i)
           idx += size
           return floor
-        }).reverse()  // переворачиваем: верхний этаж первым
+        }).reverse()
         
         let rows = floors.map(indices => `
           <div style="display: flex; gap: 9px; justify-content: center;">

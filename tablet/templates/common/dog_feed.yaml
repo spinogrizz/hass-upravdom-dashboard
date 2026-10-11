@@ -1,4 +1,6 @@
-# dog feed / walk status
+# Feeding and walking are inferred from timestamps and a dog-outside helper.
+# A single tile prioritizes the most urgent condition, then a tap acknowledges
+# that displayed condition when an automation missed a real-world event.
 dog_feed:
   entity: input_datetime.dog_fed_last_time
 
@@ -11,7 +13,9 @@ dog_feed:
   show_label: true
   show_name: false
 
-  # Tap resets the state currently shown on the dog card.
+  # Reset the displayed condition, not every dog helper. In particular, an
+  # outside correction also records an inside time so the stale walk warning
+  # does not immediately replace the corrected state.
   tap_action: |
     [[[
       const now = Date.now() / 1000;
@@ -44,13 +48,12 @@ dog_feed:
     ]]]
 
   variables:
-    # show 'dog is hungry' state when feed time exceeds 5 hours
+    # Shared thresholds keep the picture, text, background, and tap behavior
+    # in agreement about when feeding or a walk is overdue.
     hungry_interval: 18000
 
-    # show 'dog wants to go out' when backyard door is closed for 5 hours
     walk_interval: 18000
 
-    # calculate feed time by substracting input_datetime from "now" timestamp
     fed_time: |
       [[[
         let fed = new Date(entity.state).getTime()/1000
@@ -58,7 +61,7 @@ dog_feed:
         return now - fed
       ]]]
 
-    # timestamp of last walk event (outside or inside) in seconds
+    # The later event wins so an old departure cannot override a newer return.
     last_walk_event: |
       [[[
         let outsideTime = new Date(states['input_datetime.dog_come_outside_time'].state).getTime()/1000
@@ -66,7 +69,6 @@ dog_feed:
         return Math.max(outsideTime, insideTime)
       ]]]
 
-    # calculate time dog is outside in minutes
     outside_time: |
       [[[
         let outsideTime = new Date(states['input_datetime.dog_come_outside_time'].state).getTime()/1000
@@ -74,7 +76,9 @@ dog_feed:
         return Math.floor((now - outsideTime) / 60)
       ]]]
 
-  # show appropriate icon for a feeding state
+  # Apply the same priority as the correction action: outside, hungry,
+  # overdue walk, then recently fed. Otherwise a tap would reset the wrong
+  # underlying condition.
   entity_picture: |
     [[[
       let state = "happy";
@@ -94,10 +98,11 @@ dog_feed:
       return "/local/tablet/icons/dog_" + state + ".png"
     ]]]
 
-  # show appropriate label based on conditions
+  # Time-only changes do not update the entity, so depend on the minute
+  # sensor to keep elapsed durations current on screen.
   label: |
     [[[
-      // There is no triggers_update, so we need to fake the time elapsing
+      // This dependency triggers a redraw without being displayed.
       const fake_time = states['sensor.every_1m']
 
       let h = Math.ceil((variables.fed_time / 3600) * 10) / 10
@@ -131,7 +136,7 @@ dog_feed:
       }
     ]]]
 
-  # use gradient background based on conditions
+  # Match the background to the same priority used by the icon and label.
   styles:
     card:
       - background: |

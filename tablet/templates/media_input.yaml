@@ -1,3 +1,6 @@
+# Highlight the last requested media scene rather than the receiver source:
+# some scenes also control the TV or another device, so one source is not a
+# reliable description of the active preset.
 media_input:
   template:
     - base

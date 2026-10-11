@@ -1,10 +1,14 @@
+# The NSPanel uses the same button-card templates as the tablets, but has a
+# separate 480px layout for its smaller screen.
 button_card_templates:
   !include_dir_merge_named tablet/templates
 
 views:
   - title: Home
     cards:
-      # Обычное состояние - все виджеты
+      # Keep the normal grid and doorbell view as separate conditional cards.
+      # A doorbell event can then replace the whole dashboard without having
+      # to hide each ordinary widget individually.
       - type: custom:mod-card
         style: |
           ha-card {
@@ -31,7 +35,8 @@ views:
             cards:
               !include_dir_merge_list tablet/cards/nspanel
 
-      # Состояние звонка в дверь - камера на весь экран
+      # The doorbell helper switches to a full-screen camera view; the same
+      # helper makes the ordinary grid disappear above.
       - type: custom:mod-card
         style: |
           ha-card {

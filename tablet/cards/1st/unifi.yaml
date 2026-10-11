@@ -1,3 +1,5 @@
+# WAN latency from the primary and LTE links is used for connection status;
+# speed sensors alone cannot distinguish an idle link from an outage.
 - type: custom:button-card
   entity: sensor.wan_download_speed
 
@@ -78,7 +80,7 @@
         - font-size: 28px
         - position: absolute
 
-        # if there are not status info, move speed info higher
+        # Reserve space for the outage/LTE message only when it is present.
         - top: |
             [[[
               if (variables.status === "normal") {
@@ -92,7 +94,7 @@
         - font-weight: 500
 
   custom_fields:
-    # optional status info in the top part of the card
+    # Show failover or outage above the speed figures when attention is needed.
     status: >
       [[[
         const cell_icon = "<ha-icon icon='mdi:signal' style='width: 18px; height: 18px; position: relative; top: -1px;'></ha-icon>"
@@ -105,7 +107,7 @@
         return "";
       ]]]
 
-    # current download and upload speed
+    # Keep both directions readable beside the shared two-line graph.
     speed_text: >
       [[[
         function formatSpeed(speed) {
@@ -131,7 +133,8 @@
              + printSpeed(upload, "#b47cde", "↑");
       ]]]
 
-    # combined download and upload speed graphs
+    # A logarithmic scale preserves low-traffic detail without clipping
+    # short high-speed bursts on the same graph.
     speed_graph:
       card:
         type: custom:mini-graph-card

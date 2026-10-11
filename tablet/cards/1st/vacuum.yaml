@@ -1,3 +1,5 @@
+# One tap starts cleaning when docked or sends the robot home otherwise,
+# avoiding two small controls on the tablet. Hold opens full HA controls.
 - type: custom:button-card
   entity: vacuum.dreame_r2254_07f1_robot_cleaner
 
@@ -27,6 +29,8 @@
     action: more-info
 
   variables:
+    # Show a clock time for today's run and a day count for older runs;
+    # normalize both dates to midnight before comparing calendar days.
     clean_time: >
       [[[
         let timestamp = states['input_datetime.last_time_omni_1s_cleaned'].state
@@ -59,6 +63,9 @@
     home_button: >
       <ha-icon icon="mdi:home-import-outline" style="width: 40px; height: 40px;"/>
 
+    # Battery level and charging state come from separate integration fields.
+    # Guard optional values before building HTML so missing device data does
+    # not leak raw JavaScript values into a user-facing card.
     charge_status: >
       [[[
         const level = entity?.attributes?.battery_level
@@ -80,6 +87,8 @@
         return Number.isFinite(value) && value >= 0 && value <= 100 && value !== 100 ? value + '%' : ''
       ]]]
 
+  # Device-specific status explains what the robot is doing now; when idle,
+  # the last-cleaned age is more useful than a generic docked label.
   label: >
     [[[
       let state = states['sensor.dreame_r2254_07f1_status'].state
@@ -105,6 +114,8 @@
     ]]]
 
   styles:
+    # The backgrounds distinguish working, returning, and docked states at
+    # a glance without requiring the status text to be read.
     card:
       - background-image: >
           [[[

@@ -1,18 +1,22 @@
-# cctv viewer
+# include_dir_merge_list gathers card definitions from every file in this
+# directory. Keep shared floor widgets here; specialized cards live in their
+# own files and claim a grid-area in tablet_1st.yaml.
+# The camera follows the last motion event so the most relevant view appears.
 - type: custom:button-card
   template: camera
   
   view_layout:
     grid-area: cctv
 
-# main home thermostat
+# Share the same floor overview on both tablets so people and heating status
+# have a consistent location when moving between dashboards.
 - type: custom:button-card
   template: main
   
   view_layout:
     grid-area: main
 
-# weather
+# The forecast is a composed card, keeping three time slots in one grid area.
 - type: custom:button-card
   template: weather
   

@@ -1,11 +1,14 @@
-# cctv viewer (last camera with motion, tap to switch)
+# Both tablet floors reuse the same templates. This file changes only the
+# cards and camera choices needed for the second-floor layout.
+# The first camera follows motion; the veranda view below pins an ID and
+# disables cycling so the two camera areas serve different purposes.
 - type: custom:button-card
   template: camera
   
   view_layout:
     grid-area: cctv
 
-# veranda camera (fixed)
+# Pinning the veranda avoids losing this view when another camera detects motion.
 - type: custom:button-card
   template: camera
 
@@ -18,28 +21,28 @@
   view_layout:
     grid-area: veranda
 
-# main home thermostat
+# Reuse the floor overview so temperature and presence keep the same meaning.
 - type: custom:button-card
   template: main
   
   view_layout:
     grid-area: main
 
-# weather
+# Reuse the composed forecast card to preserve the same visual rhythm.
 - type: custom:button-card
   template: weather
   
   view_layout:
     grid-area: weather
 
-# tesla + haval
+# The two vehicle tiles share one grid area through their parent template.
 - type: custom:button-card
   template: cars
 
   view_layout:
     grid-area: cars
 
-# dog feed / walk status
+# Dog status is shared across floors because the underlying helpers are global.
 - type: custom:button-card
   template: dog_feed
 
