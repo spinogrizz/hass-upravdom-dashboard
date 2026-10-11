@@ -61,17 +61,23 @@
 
     charge_status: >
       [[[
-        if ( states['sensor.dreame_r2254_07f1_charging_state'].state == 'charging' ) {
+        const level = entity?.attributes?.battery_level
+        if (level === undefined || level === null || level === '') return ''
+        const value = Number(level)
+        if (!Number.isFinite(value) || value < 0 || value > 100) return ''
+        if (states['sensor.dreame_r2254_07f1_charging_state']?.state == 'charging') {
           return "<ha-icon icon='mdi:lightning-bolt' style='width: 32px; height: 32px;'/>"
-        } else {
-          return "<ha-icon icon='" + entity.attributes.battery_icon + "' style='width: 25px; height: 25px;'/>"
         }
+        const icon = entity.attributes.battery_icon
+        return icon ? "<ha-icon icon='" + icon + "' style='width: 25px; height: 25px;'/>" : ''
       ]]]
 
     battery: >
       [[[
-        let level = entity.attributes.battery_level
-        return level == 100 ? '' : (level + '%')
+        const level = entity?.attributes?.battery_level
+        if (level === undefined || level === null || level === '') return ''
+        const value = Number(level)
+        return Number.isFinite(value) && value >= 0 && value <= 100 && value !== 100 ? value + '%' : ''
       ]]]
 
   label: >

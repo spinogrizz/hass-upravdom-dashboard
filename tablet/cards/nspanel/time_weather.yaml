@@ -73,8 +73,8 @@
         let condition = entity.attributes['now_cond']
         let temp = parseInt(entity.attributes['now_temp'])
         
-        // Погода в следующем периоде
-        let laterTemp = parseInt(entity.attributes['after_temp'])
+        // Прогноз примерно через 6 часов (forecast[6])
+        let laterTemp = parseInt(entity.attributes['later_temp'])
         
         // Определение иконки
         let time = new Date(entity.attributes['now_date'])

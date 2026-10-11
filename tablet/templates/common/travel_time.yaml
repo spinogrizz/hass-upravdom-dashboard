@@ -110,7 +110,7 @@ travel_time_unit:
 
   label: >
     [[[
-      return entity ? parseInt(entity.state)
+      return entity ? parseInt(entity.state*1.2)
             + "&nbsp;<span style='font-size: 15pt'>мин</span>"
          : ''
     ]]]  

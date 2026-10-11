@@ -9,13 +9,13 @@ views:
       grid-template-columns: 90px 162px 162px repeat(2, 120px) repeat(4, 90px)
       grid-template-rows: repeat(7, 90px)
       grid-template-areas: |
-        "light  main      main      none1    none1     todo    todo    todo    todo"
-        "light  main      main      none1    none1     todo    todo    todo    todo"
-        "light  main      main      none1    none1     todo    todo    todo    todo"
-        "light  weather   weather   route    route     todo    todo    todo    todo"
-        "light  weather   weather   route    route     todo    todo    todo    todo"
-        "light  none2     none4     none5    none5     todo    todo    todo    todo"
-        "light  none2     none4     none5    none5     todo    todo    todo    todo"
+        "light  main      main      cars     cars      cctv    cctv    cctv    cctv"
+        "light  main      main      cars     cars      cctv    cctv    cctv    cctv"
+        "light  main      main      cars     cars      cctv    cctv    cctv    cctv"
+        "light  weather   weather   none1    none1     veranda veranda veranda veranda"
+        "light  weather   weather   none1    none1     veranda veranda veranda veranda"
+        "light  none2     dog       none3    none3     veranda veranda veranda veranda"
+        "light  none2     dog       none3    none3     none4   none4   none4   none4"
 
     card_mod:
       style: |

@@ -3,6 +3,11 @@ camera:
     - base
     - height-3rows
 
+  variables:
+    # fixed camera id (e.g. 'veranda'); if not set, show the last camera
+    # that detected motion (override tap_action with 'none' for fixed ones)
+    camera: null
+
   # tap to switch between cameras
   tap_action:
     action: call-service
@@ -33,7 +38,9 @@ camera:
         const fake_time = states['sensor.every_5s']
         const fake_motion = states['input_text.last_camera_detected_motion']
         
-        let camera_id = states['input_text.last_camera_detected_motion'].state || 'door'
+        let camera_id = variables.camera
+                     || states['input_text.last_camera_detected_motion'].state
+                     || 'door'
         return "http://10.42.20.1:9091/homeassistant/camera/" + camera_id + "/medium"
                + "?ts=" + Date.now()
       ]]]
@@ -46,4 +53,3 @@ camera:
     entity_picture:
       - width: auto
       - height: 110%
-

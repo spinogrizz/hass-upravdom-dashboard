@@ -1,7 +1,8 @@
+# empty spaces
 - type: custom:button-card
   template: 
     - base
-    - height-3rows
+    - height-2rows
 
   view_layout:
     grid-area: none1
@@ -14,26 +15,18 @@
   view_layout:
     grid-area: none2
 
-# - type: custom:button-card
-#   template: 
-#     - base
-#     - height-2rows
-
-#   view_layout:
-#     grid-area: none3
-
 - type: custom:button-card
   template: 
     - base
     - height-2rows
+
+  view_layout:
+    grid-area: none3
+
+- type: custom:button-card
+  template: 
+    - base
+    - height-1row
 
   view_layout:
     grid-area: none4
-
-- type: custom:button-card
-  template: 
-    - base
-    - height-2rows
-
-  view_layout:
-    grid-area: none5

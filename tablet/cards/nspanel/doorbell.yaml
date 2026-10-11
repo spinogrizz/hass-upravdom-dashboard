@@ -10,8 +10,8 @@ show_entity_picture: true
 entity_picture: >
   [[[
     // Добавляем timestamp чтобы изображение обновлялось
-    const fake_time = states['sensor.every_2s']
-    return "https://cameras.gryzlov.com/homeassistant/camera/door/medium?crop=700,1250,1000,1000&rotate=30&ts=" + Date.now()
+    const fake_time = states['sensor.every_5s']
+    return "https://cameras.gryzlov.com/homeassistant/camera/doorbell/high?crop=500,1000,900,900&ts=" + Date.now()
   ]]]
 
 styles:

@@ -1,10 +1,22 @@
-# cctv viewer
-# - type: custom:button-card
-#   template: camera
+# cctv viewer (last camera with motion, tap to switch)
+- type: custom:button-card
+  template: camera
   
-#   view_layout:
-#     grid-area: cctv
+  view_layout:
+    grid-area: cctv
 
+# veranda camera (fixed)
+- type: custom:button-card
+  template: camera
+
+  variables:
+    camera: veranda
+
+  tap_action:
+    action: none
+
+  view_layout:
+    grid-area: veranda
 
 # main home thermostat
 - type: custom:button-card
@@ -13,22 +25,26 @@
   view_layout:
     grid-area: main
 
-
-# travel time
-- type: custom:button-card
-  template: 
-   - travel_time
-   - height-2rows
-  
-  view_layout:
-    grid-area: route
-
 # weather
 - type: custom:button-card
   template: weather
   
   view_layout:
     grid-area: weather
+
+# tesla + haval
+- type: custom:button-card
+  template: cars
+
+  view_layout:
+    grid-area: cars
+
+# dog feed / walk status
+- type: custom:button-card
+  template: dog_feed
+
+  view_layout:
+    grid-area: dog
 
 # # roboforex
 # - type: custom:button-card

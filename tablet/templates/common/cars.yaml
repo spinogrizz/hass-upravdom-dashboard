@@ -1,0 +1,65 @@
+# both cars (tesla + haval) stacked in one 2-column, 3-row block
+cars:
+  styles:
+    grid:
+      - grid-template-areas: '"tesla" "haval"'
+      - grid-template-columns: 1fr
+      - grid-template-rows: 130px 130px
+
+    card:
+      - padding: 0px
+      - margin: 0px
+      - background-color: "#00000000"
+      - border: none
+      - height: calc(100% + 5px)
+
+    custom_fields:
+      tesla:
+        - height: calc(100% - 5px)
+
+      haval:
+        - height: calc(100% - 5px)
+        - margin-top: 10px
+
+
+  custom_fields:
+    tesla:
+      card:
+        type: custom:button-card
+
+        tap_action:
+          action: call-service
+          service: rest_command.tesla_command
+          service_data:
+            command: auto_conditioning
+            argument: 1
+
+        template: car
+        variables:
+          name: tesla
+          present: >
+            [[[ return states['device_tracker.spacex_location']?.state == 'home' ]]]
+          charge: >
+            [[[ return states['sensor.spacex_battery_level']?.state ]]]
+          is_charging: >
+            [[[ return states['sensor.spacex_charging']?.state == 'charging' ]]]
+          is_plugged: >
+            [[[ return states['binary_sensor.spacex_charge_cable']?.state == 'on' ]]]
+
+    haval:
+      card:
+        type: custom:button-card
+        tap_action:
+          action: call-service
+          service: homeassistant.toggle
+          service_data:
+            entity_id: switch.dzholion
+        template: car
+        variables:
+          name: jolion
+          present: true
+          fuel: >
+            [[[
+              const fuel = states['sensor.dzholion_zapas_khoda_na_benzine']?.state;
+              return fuel != null && fuel !== '' && Number.isFinite(Number(fuel)) ? fuel : '—';
+            ]]]

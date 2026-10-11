@@ -7,11 +7,22 @@ car:
 
   label: >
     [[[ 
-      if ( variables.charge != undefined && variables.charge != "unavailable" ) {
-        return (variables.charge || "--") + " %</div>"
+      const rawCharge = variables.charge
+      const charge = Number(rawCharge)
+      if (rawCharge !== undefined && rawCharge !== null && String(rawCharge).trim() !== '' &&
+          Number.isFinite(charge) && charge >= 0 && charge <= 100) {
+        return charge + " %"
+      }
+      else if ( variables.name === 'tesla' ) {
+        return '— %'
       }
       else if ( variables.fuel != undefined ) {
-        return variables.fuel + ' л'
+        return `
+          <div style="display: flex; flex-direction: column; align-items: flex-end; line-height: 1;">
+            <span>${variables.fuel}</span>
+            <span style="font-size: 0.67em;">км</span>
+          </div>
+        `
       } else {
         return ""
       }
@@ -42,7 +53,7 @@ car:
       - position: absolute
       - top: 16px
       - right: 20px
-      - font-size: 28px
+      - font-size: 30px
       - opacity: 0.9
       - color: >
           [[[
@@ -51,9 +62,10 @@ car:
             let green  = "#67C743"
             let white  = "#FFFFFF"
 
-            if ( variables.charge != undefined ) {
-              let charge = variables.charge
-
+            const rawCharge = variables.charge
+            const charge = Number(rawCharge)
+            if (rawCharge !== undefined && rawCharge !== null && String(rawCharge).trim() !== '' &&
+                Number.isFinite(charge) && charge >= 0 && charge <= 100) {
               if ( charge < 30 ) {
                 return red
               } else if ( charge < 65 ) {
@@ -64,9 +76,9 @@ car:
             } else if ( variables.fuel != undefined ) {
               let fuel = variables.fuel
 
-              if ( fuel < 15 ) {
+              if ( fuel < 100 ) {
                 return red
-              } else if ( fuel < 25 ) {
+              } else if ( fuel < 150 ) {
                 return yellow
               } else {
                 return white
@@ -96,6 +108,6 @@ car:
         - color: "#CF4141"
         - visibility: >
             [[[
-              return variables.fuel < 15 ? 'visible' : 'hidden'
+              return variables.fuel < 150 ? 'visible' : 'hidden'
             ]]]            
 

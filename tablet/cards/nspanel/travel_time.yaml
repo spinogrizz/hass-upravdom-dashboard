@@ -38,18 +38,18 @@
     content: >
       [[[
         // Время туда
-        let thereTime = entity ? parseInt(entity.state) : 0
+        let thereTime = entity ? parseInt(entity.state*1.2) : 0
         
         // Время обратно
         let backTime = states['sensor.from_mvl_back_home_time'] 
-          ? parseInt(states['sensor.from_mvl_back_home_time'].state) 
+          ? parseInt(states['sensor.from_mvl_back_home_time'].state*1.2)
           : 0
         
         // Светофор для времени туда
         let trafficIcon = ''
-        if (thereTime < 20) {
+        if (thereTime <= 20) {
           trafficIcon = '/local/tablet/icons/traffic_green.png'
-        } else if (thereTime < 30) {
+        } else if (thereTime <= 30) {
           trafficIcon = '/local/tablet/icons/traffic_yellow.png'
         } else {
           trafficIcon = '/local/tablet/icons/traffic_red.png'

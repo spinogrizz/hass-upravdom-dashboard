@@ -1,0 +1,163 @@
+- type: custom:button-card
+  entity: input_boolean.vika_steam_session_active
+
+  view_layout:
+    grid-area: steam
+
+  template:
+    - base
+    - height-2rows
+
+  show_entity_picture: true
+  show_state: false
+  show_label: true
+  show_name: true
+  tap_action:
+    action: call-service
+    service: input_boolean.toggle
+    target:
+      entity_id: input_boolean.vika_steam_dashboard_mode
+
+  variables:
+    sad_interval: 86400
+    dashboard_mode: |
+      [[[
+        return states['input_boolean.vika_steam_dashboard_mode']?.state === 'on'
+      ]]]
+    stop_ms: |
+      [[[
+        const raw = states['input_datetime.vika_playtime_stop']?.state
+        const ts = Date.parse(raw)
+        return Number.isFinite(ts) ? ts : null
+      ]]]
+    idle_seconds: |
+      [[[
+        if (variables.stop_ms === null) return 0
+        return Math.max(0, (Date.now() - variables.stop_ms) / 1000)
+      ]]]
+    day_diff: |
+      [[[
+        if (variables.stop_ms === null) return 0
+        const today = new Date()
+        today.setHours(0, 0, 0, 0)
+        const stopDay = new Date(variables.stop_ms)
+        stopDay.setHours(0, 0, 0, 0)
+        const diff = Math.floor((today.getTime() - stopDay.getTime()) / 86400000)
+        return Math.max(0, diff)
+      ]]]
+
+  entity_picture: |
+    [[[
+      if (entity.state === 'on') return '/local/tablet/icons/vika_gaming.png'
+      if (variables.idle_seconds < variables.sad_interval) return '/local/tablet/icons/vika_normal.png'
+      return '/local/tablet/icons/vika_sad.png'
+    ]]]
+
+  label: |
+    [[[
+      const fake = states['sensor.every_1m']
+
+      if (entity.state === 'on') {
+        return ''
+      } else if (variables.dashboard_mode) {
+        return 'сегодня'
+      } else if (variables.day_diff >= 1) {
+        return ''
+      } else {
+        return 'не играет'
+      }
+    ]]]
+
+  name: |
+    [[[
+      const fake = states['sensor.every_1m']
+      const unit = (text) => `<span style='font-size: 16pt'>${text}</span>`
+      const hourWord = (hrs) => (hrs === 1 ? 'час' : hrs < 5 ? 'часа' : 'часов')
+      const dayWord = (days) => {
+        const mod10 = days % 10
+        const mod100 = days % 100
+        if (mod10 === 1 && mod100 !== 11) return 'день'
+        if (mod10 >= 2 && mod10 <= 4 && (mod100 < 12 || mod100 > 14)) return 'дня'
+        return 'дней'
+      }
+      const now = Date.now()
+
+      const toSecondsFromNow = (entityId) => {
+        const raw = states[entityId]?.state
+        const ts = Date.parse(raw)
+        if (!Number.isFinite(ts)) return 0
+        return Math.max(0, (now - ts) / 1000)
+      }
+
+      const formatTimeDetail = (hoursFloat) => {
+        const hrs = Math.floor(hoursFloat)
+        const mins = Math.round((hoursFloat - hrs) * 60)
+        if (hrs === 0) return `${mins} ${unit('мин')}`
+        if (mins === 0) return `${hrs} ${unit(hourWord(hrs))}`
+        return `${hrs}&nbsp;${unit('ч')} ${mins}&nbsp;${unit('м')}`
+      }
+
+      const formatDurationShort = (seconds) => {
+        const hrs = Math.floor(seconds / 3600)
+        const mins = Math.floor((seconds % 3600) / 60)
+        if (hrs <= 0) return `${mins} ${unit('мин')}`
+        if (mins === 0) return `${hrs} ${unit('ч')}`
+        return `${hrs} ${unit('ч')} ${mins} ${unit('м')}`
+      }
+
+      // gaming: сколько длится текущая сессия
+      if (entity.state === 'on') {
+        const sessionSeconds = toSecondsFromNow('input_datetime.vika_playtime_start')
+        const sessionHours = sessionSeconds / 3600
+        return formatTimeDetail(sessionHours)
+      }
+
+      // режим 1: суммарно за сегодня
+      if (variables.dashboard_mode) {
+        const total = parseFloat(states['sensor.steam_w0bblink_gaming_today']?.state) || 0
+        if (total < 0.02) return `0 ${unit('мин')}`
+        return formatTimeDetail(total)
+      }
+
+      // режим 2: сколько уже не играет
+      if (variables.stop_ms === null) return `0 ${unit('мин')}`
+      if (variables.day_diff === 0) return formatDurationShort(variables.idle_seconds)
+      if (variables.day_diff === 1) return 'Вчера'
+      return `${variables.day_diff} ${unit(dayWord(variables.day_diff))}`
+    ]]]
+
+  styles:
+    card:
+      - background: |
+          [[[
+            if (entity.state === 'on') {
+              return "radial-gradient(#00440099, #00220099)"
+            }
+            else {
+              return "#00000099"
+            }
+          ]]]
+    icon:
+      - width: 70%
+      - position: relative
+      - top: |
+         [[[
+            if (entity.state === 'on') {
+              return '-3%'
+            } else {
+              return '10%'
+            }
+         ]]]
+    label:
+      - font-size: 13pt
+      - font-weight: 400
+      - color: '#bdbdbd'
+      - position: relative
+      - top: -30%
+    name:
+      - font-size: 23pt
+      - font-weight: 400
+      - color: '#ffffff'
+      - opacity: 1
+      - position: relative
+      - top: -22%

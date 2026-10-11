@@ -9,13 +9,6 @@
 
   entity: sensor.spacex_battery_level
 
-  triggers_update:
-    - sensor.spacex_battery_level
-    - sensor.spacex_charging
-    - device_tracker.spacex_location
-    - switch.spacex_defrost
-    - climate.spacex_climate
-
   # Тап - включаем климат или выключаем всё если уже греется
   tap_action: >
     [[[
@@ -60,12 +53,6 @@
     card:
       - padding: 0px
       - overflow: hidden
-      - visibility: >
-          [[[
-            // Скрываем карточку если машины нет дома
-            let present = states['device_tracker.spacex_location']
-            return (present && present.state === 'home') ? 'visible' : 'hidden'
-          ]]]
       - background: >
           [[[
             // Проверяем активен ли прогрев
@@ -126,7 +113,10 @@
     content: >
       [[[
         // Уровень заряда
-        let charge = entity ? parseInt(entity.state) : 0
+        const rawCharge = entity?.state
+        const charge = Number(rawCharge)
+        const hasCharge = rawCharge !== undefined && rawCharge !== null && String(rawCharge).trim() !== '' &&
+          Number.isFinite(charge) && charge >= 0 && charge <= 100
         
         // Статус зарядки
         let chargingState = states['sensor.spacex_charging']
@@ -134,9 +124,9 @@
         
         // Цвет в зависимости от уровня заряда
         let chargeColor = '#FFFFFF'
-        if (charge < 30) {
+        if (hasCharge && charge < 30) {
           chargeColor = '#CF4141'  // красный
-        } else if (charge < 65) {
+        } else if (hasCharge && charge < 65) {
           chargeColor = '#D5C539'  // желтый
         }
         
@@ -148,7 +138,7 @@
         return `
           <div style="display: flex; flex-direction: column; align-items: flex-start;">
             <span style="font-size: 52px; font-weight: 700; color: ${chargeColor};">
-              ${charge}<span style="font-size: 28px; opacity: 0.8;">%</span>
+              ${hasCharge ? charge : '—'}<span style="font-size: 28px; opacity: 0.8;">%</span>
             </span>
             ${chargingIcon}
           </div>

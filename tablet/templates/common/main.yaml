@@ -16,22 +16,63 @@ main:
           return "<span class='" + style + "'>" + (Math.round(temp) || '--') + "°</span>"
         }
       ]]]
+    _is_floor_visible: >
+      [[[
+        return function (floor) {
+          return floor === '1' || floor === '2' || floor === '3'
+        }
+      ]]]
+    _is_occupy_visible: >
+      [[[
+        return function (floor) {
+          return variables._is_floor_visible(floor) || floor === 'out'
+        }
+      ]]]
+    _floor_top: >
+      [[[
+        return function (floor) {
+          if (!variables._is_floor_visible(floor)) return '-100px'
+          return `${Math.round(204 - (Number(floor) - 1) * 71.5)}px`
+        }
+      ]]]
+    _occupy_top: >
+      [[[
+        return function (floor) {
+          if (variables._is_floor_visible(floor)) return variables._floor_top(floor)
+          if (floor === 'out') return variables._floor_top('1')
+          return '-100px'
+        }
+      ]]]
+    _occupy_left: >
+      [[[
+        return function (floor, otherFloor, is_second_person) {
+          if (floor === 'out') {
+            if (otherFloor === 'out') return is_second_person ? '132px' : '118px'
+            return '126px'
+          }
 
-  # use custom fields to display state for each floor
+          if (variables._is_floor_visible(floor)) {
+            if (is_second_person && otherFloor === floor) return '22px'
+            return '34px'
+          }
+
+          return '34px'
+        }
+      ]]]
+
+  # use custom fields to display presence dots
   custom_fields:
-    occupy_1st: >
-      [[[ 
-        return (states['binary_sensor.group_sensors_1st'].state == 'on') ? '•' : ''
-      ]]]
-
-    occupy_2nd: >
+    occupy_denis: >
       [[[
-        return (states['binary_sensor.group_sensors_2nd'].state == 'on') ? '•' : ''
+        const denisFloor = states['sensor.unifi_device_presence_denis_smartphone_floor']?.state
+        if (!variables._is_occupy_visible(denisFloor)) return ''
+        return denisFloor === 'out' ? "<span style='font-size:0.8em; position: relative; top: -2px; left: -2px'>◦</span>" : '•'
       ]]]
-
-    occupy_3rd: >
+    occupy_valya: >
       [[[
-        return (states['binary_sensor.group_sensors_3rd'].state == 'on') ? '•' : ''
+        const valyaFloor = states['sensor.unifi_device_presence_valya_smartphone_floor']?.state
+        if (!variables._is_occupy_visible(valyaFloor)) return ''
+        return valyaFloor === 'out' ? "<span style='font-size:0.8em; position: relative; top: -2px; left: -2px'>◦</span>" : '•'
       ]]]
 
     temp_1st: >
@@ -66,6 +107,19 @@ main:
 
         return variables._unit_function(is_ac_on, is_heat_on, is_floor_on, temp)
       ]]]
+
+    water_2nd: >
+      [[[
+        return states['sensor.water_use_floor']?.state?.split(',').includes('2nd')
+          ? '<ha-icon icon="mdi:water" style="width: 22px; height: 22px;" />'
+          : ''
+      ]]]
+    water_3rd: >
+      [[[
+        return states['sensor.water_use_floor']?.state?.split(',').includes('3rd')
+          ? '<ha-icon icon="mdi:water" style="width: 22px; height: 22px;" />'
+          : ''
+      ]]]
   
   styles:
     card: 
@@ -74,26 +128,39 @@ main:
       - background-color: '#00000099'
 
     custom_fields:
-      occupy_1st:
+      occupy_denis:
         - position: absolute
-        - top: 198px
-        - left: 34px
+        - top: >
+            [[[
+              const floor = states['sensor.unifi_device_presence_denis_smartphone_floor']?.state
+              return variables._occupy_top(floor)
+            ]]]
+        - left: >
+            [[[
+              const denisFloor = states['sensor.unifi_device_presence_denis_smartphone_floor']?.state
+              const valyaFloor = states['sensor.unifi_device_presence_valya_smartphone_floor']?.state
+              return variables._occupy_left(denisFloor, valyaFloor, false)
+            ]]]
         - font-size: 40px
-        - color: "#68BD3D"
+        - line-height: 1
+        - color: "#8FC6E8"
 
-      occupy_2nd:
+      occupy_valya:
         - position: absolute
-        - top: 127px
-        - left: 34px
+        - top: >
+            [[[
+              const floor = states['sensor.unifi_device_presence_valya_smartphone_floor']?.state
+              return variables._occupy_top(floor)
+            ]]]
+        - left: >
+            [[[
+              const denisFloor = states['sensor.unifi_device_presence_denis_smartphone_floor']?.state
+              const valyaFloor = states['sensor.unifi_device_presence_valya_smartphone_floor']?.state
+              return variables._occupy_left(valyaFloor, denisFloor, true)
+            ]]]
         - font-size: 40px
-        - color: "#68BD3D"
-
-      occupy_3rd:
-        - position: absolute
-        - top: 55px
-        - left: 34px
-        - font-size: 40px
-        - color: "#68BD3D"                
+        - line-height: 1
+        - color: "#DFA0C3"
 
       temp_1st:
         - position: absolute
@@ -112,6 +179,20 @@ main:
         - top: 61px
         - width: 66px
         - left: 52px
+
+      water_2nd:
+        - position: absolute
+        - top: 133px
+        - left: 120px
+        - color: "#79D7FA"
+        - pointer-events: none
+
+      water_3rd:
+        - position: absolute
+        - top: 62px
+        - left: 120px
+        - color: "#79D7FA"
+        - pointer-events: none
 
 
   # use different styles for a different states:
